@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div class="card" style="width: 60%; margin: 0 auto;">
+    <form class="card-body" action="/staff/create" method="post">
+        <h3>Sửa thông tin nhân viên</h3>
+        @Html.ValidationSummary()
+        <div class="mb-3">
+            <label for="HoVaTen" class="form-label">Họ và tên nhân viên</label>
+            <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" />
+        </div>
+        <div class="mb-3">
+            <label for="NgaySinh" class="form-label">Ngày sinh</label>
+            <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" />
+        </div>
+        <div class="mb-3">
+            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" />
+        </div>
+        <div class="mb-3">
+            <label for="DiaChi" class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
+        </div>
+        <div class="mb-3">
+            <label for="ChucVu" class="form-label">Chức vụ</label>
+            <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
+        </div>
+        <div class="mb-3">
+            <label for="SoNamCongTac" class="form-label">Số năm công tác</label>
+            <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" />
+        </div>
+        <div class="d-flex">
+            <button class="btn btn-success" type="submit">Thêm mới</button>
+            <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
+        </div>
+    </form>
+    </div>

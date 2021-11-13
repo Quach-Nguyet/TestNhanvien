@@ -1,7 +1,49 @@
-﻿
+﻿@model  List<QuanLyNhanVien.Models.NhanVien>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
+<div class="container">
+    <div class="header d-flex">
+        <a class="btn btn-outline-primary" style="width: 10%" href="/staff/create">Thêm mới</a>
+        <div style="margin-left:2%; width: 88%">
+            <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa" />
+        </div>
+    </div>
+    <div class="mt-3">
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>Mã nhân viên</th>
+                    <th>Họ tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Địa chỉ</th>
+                    <th>SĐT</th>
+                    <th>Chức vụ</th>
+                    <th>Số năm công tác</th>
+                    <th>Lựa chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.MaNhanvien</td>
+                    <td>@item.HoVaTen</td>
+                    <td>@item.NgaySinh</td>
+                    <td>@item.DiaChi</td>
+                    <td>@item.SoDienThoai</td>
+                    <td>@item.ChucVu</td>
+                    <td>@item.SoNamCongTac</td>
+                    <td>
+                        <a class="btn btn-secondary btn-sm" href="/staff/edit?maNhanVien=@item.MaNhanvien">Sửa</a>
+                        <a class="btn btn-outline-danger btn-sm">Xóa</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
