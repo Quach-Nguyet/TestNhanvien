@@ -16,6 +16,7 @@ namespace QuanLyNhanVien.Models
 
 
         [Required(ErrorMessage = "Số điện thoại không được để trống")]
+        [StringLength(10, ErrorMessage = "Số điện thoại không tồn tại")]
         public string SoDienThoai { get; set; }
 
         public string DiaChi { get; set; }
@@ -38,6 +39,7 @@ namespace QuanLyNhanVien.Models
         public DateTime NgaySinh { get; set; }
 
         [Required(ErrorMessage = "Số điện thoại không được để trống")]
+        [StringLength(10, ErrorMessage = "Số điện thoại không tồn tại")]
         public string SoDienThoai { get; set; }
 
         public string DiaChi { get; set; }

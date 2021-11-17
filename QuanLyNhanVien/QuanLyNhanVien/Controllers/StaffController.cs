@@ -61,7 +61,7 @@ namespace QuanLyNhanVien.Controllers
             }
             else
             {
-                ViewData["Messeger"] = "Không tìm thấy dữ liệu";
+                ViewData["Messeger"] = "* Không tìm thấy dữ liệu";
                 return View("Index", dsNhanVien);
             }
         }
