@@ -125,6 +125,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Fomart.cs" />
     <Compile Include="Models\NhanVien.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -169,7 +170,6 @@
     <Content Include="Views\Staff\Create.cshtml" />
     <Content Include="Views\Staff\Edit.cshtml" />
     <Content Include="Views\Staff\Update.cshtml" />
-    <Content Include="Views\Staff\Delete.cshtml" />
     <Content Include="Views\Staff\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -4,12 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+<!-- Kết thúc -->
+    </p>
 <div class="container">
     <div class="header d-flex">
         <a class="btn btn-outline-primary" style="width: 10%" href="/staff/create">Thêm mới</a>
         <div style="margin-left:2%; width: 88%">
-            <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa" />
+            <form action="/Staff/Search" type="submit" name="Mess">
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa cần tìm" />
+                <span>@ViewData["Messeger"]</span>
+            </form>
         </div>
     </div>
     <div class="mt-3">
@@ -22,28 +26,87 @@
                     <th>Địa chỉ</th>
                     <th>SĐT</th>
                     <th>Chức vụ</th>
-                    <th>Số năm công tác</th>
+                    <th id="nam" style="text-align:center">Số năm công tác</th>
                     <th>Lựa chọn</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in Model)
-            {
+                @foreach (var item in Model)
+                {
                 <tr>
-                    <td>@item.MaNhanvien</td>
+                    <td>@item.MaNhanVien</td>
                     <td>@item.HoVaTen</td>
-                    <td>@item.NgaySinh</td>
+                    <td>@Html.DisplayFor(x => item.NgaySinh) </td>
                     <td>@item.DiaChi</td>
                     <td>@item.SoDienThoai</td>
                     <td>@item.ChucVu</td>
                     <td>@item.SoNamCongTac</td>
                     <td>
-                        <a class="btn btn-secondary btn-sm" href="/staff/edit?maNhanVien=@item.MaNhanvien">Sửa</a>
-                        <a class="btn btn-outline-danger btn-sm">Xóa</a>
+                        <a class="btn btn-secondary btn-sm" href="/staff/edit?maNhanVien=@item.MaNhanVien">Sửa</a>
+                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#Xoanv-@item.MaNhanVien">Xóa</a>
                     </td>
                 </tr>
-            }
+                }
             </tbody>
         </table>
+        @foreach (var item in Model)
+        {
+            <div class="modal fade" id="Xoanv-@item.MaNhanVien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Xóa Nhân Viên</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn chắc chắn muốn xóa nhân viên này?
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-primary" href="/staff/delete?ma=@item.MaNhanVien">Yes</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No, thanks</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="modal fade" id="Messeger" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Lỗi</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @ViewData["Messeger"]
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        <script>
+            $(function () {
+                function Search() {
+                    var test1 = $('#Mess').val();
+                    if (test1 == "*Tên đã có. Yêu cầu nhập lại")
+                        $("#Messeger").modal('show');
+                });
+            });
+    </script>
+} 

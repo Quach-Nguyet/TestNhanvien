@@ -1,87 +1,97 @@
 ﻿@model QuanLyNhanVien.Models.NhanVien
-@{
-    ViewBag.Title = "Create";
+
+@{ ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<
+<style>
+    span #error{
+        color:red;
+    }
+</style>
+
 <div class="card" style="width: 60%; margin: 0 auto;">
-    @*<form class="card-body" action="/staff/create" method="post">
-            <h3>Thêm mới nhân viên</h3>
-            @Html.ValidationSummary()
-            <div class="mb-3">
-                <label for="HoVaTen" class="form-label">Họ và tên nhân viên</label>
-                <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" />
-            </div>
-            <div class="mb-3">
-                <label for="NgaySinh" class="form-label">Ngày sinh</label>
-                <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" />
-            </div>
-            <div class="mb-3">
-                <label for="SoDienThoai" class="form-label">Số điện thoại</label>
-                <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" />
-            </div>
-            <div class="mb-3">
-                <label for="DiaChi" class="form-label">Địa chỉ</label>
-                <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
-            </div>
-            <div class="mb-3">
-                <label for="ChucVu" class="form-label">Chức vụ</label>
-                <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
-            </div>
-            <div class="mb-3">
-                <label for="SoNamCongTac" class="form-label">Số năm công tác</label>
-                <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" />
-            </div>
-            <div class="d-flex">
-                <button class="btn btn-success" type="submit">Thêm mới</button>
-                <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
-            </div>
-        </form>*@
-    @using (Html.BeginForm("Create", "Staff", FormMethod.Post, new { @class="card-body" }))
-    {
+    <form class="card-body" action="/staff/create" method="post">
         <h3>Thêm mới nhân viên</h3>
+        @Html.ValidationSummary()
         <div class="mb-3">
-            @Html.LabelFor(t => t.HoVaTen, new { @class="form-label" })
-            @Html.TextBoxFor(t => t.HoVaTen, new { @class = "form-control" })
-            @Html.ValidationMessageFor(t=>t.HoVaTen)
+            <label for="HoVaTen" class="form-label">Họ và tên nhân viên</label>
+            <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" />
+            <span id="error"> @ViewData["ErrorName"] </span>
+
         </div>
         <div class="mb-3">
-            @Html.LabelFor(t => t.NgaySinh, new { @class = "form-label" })
-            @Html.TextBoxFor(t => t.NgaySinh, new { id= "NgaySinh", autocomplete="off", @class = "form-control" })
-            @Html.ValidationMessageFor(t => t.NgaySinh)
+            <label for="NgaySinh" class="form-label">Ngày sinh</label>
+            <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" />
         </div>
         <div class="mb-3">
-            @Html.LabelFor(t => t.SoDienThoai, new { @class = "form-label" })
-            @Html.TextBoxFor(t => t.SoDienThoai, new { @class = "form-control" })
-            @Html.ValidationMessageFor(t => t.SoDienThoai)
+            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" />
+            <span id="error"> @ViewData["ErrorPhone"] </span>
         </div>
         <div class="mb-3">
-            @Html.LabelFor(t => t.DiaChi, new { @class = "form-label" })
-            @Html.TextBoxFor(t => t.DiaChi, new { @class = "form-control" })
-            @Html.ValidationMessageFor(t => t.DiaChi)
+            <label for="DiaChi" class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
         </div>
         <div class="mb-3">
-            @Html.LabelFor(t => t.ChucVu, new { @class = "form-label" })
-            @Html.TextBoxFor(t => t.ChucVu, new { @class = "form-control" })
-            @Html.ValidationMessageFor(t => t.ChucVu)
+            <label for="ChucVu" class="form-label">Chức vụ</label>
+            <input type="text" class="form-control" id="ChucVu" name="ChucVu" />
         </div>
         <div class="mb-3">
-            @Html.LabelFor(t => t.SoNamCongTac, new { @class = "form-label" })
-            @Html.TextBoxFor(t => t.SoNamCongTac, new { @class = "form-control" })
-            @Html.ValidationMessageFor(t => t.SoNamCongTac,null,new { @class = "form-text text-danger" })
+            <label for="SoNamCongTac" class="form-label">Số năm công tác</label>
+            <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" />
         </div>
         <div class="d-flex">
             <button class="btn btn-success" type="submit">Thêm mới</button>
             <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
         </div>
-    }
+    </form>
+    @*@using (@Html.BeginForm("Create", "Staff", FormMethod.Post, new { @class="card-body" }))
+        {
+            <h3>Thêm mới nhân viên</h3>
+            <div class="mb-3">
+                @Html.LabelFor(t => t.HoVaTen, new { @class="form-label" })
+                @Html.TextBoxFor(t => t.HoVaTen, new { @class = "form-control"})
+                @Html.ValidationMessageFor(t=>t.HoVaTen)
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(t => t.NgaySinh, new { @class = "form-label" })
+                @Html.TextBoxFor(t => t.NgaySinh, new { id= "NgaySinh", autocomplete="off", @class = "form-control"})
+                @Html.ValidationMessageFor(t => t.NgaySinh)
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(t => t.SoDienThoai, new { @class = "form-label" })
+                @Html.TextBoxFor(t => t.SoDienThoai, new { @class = "form-control"})
+                @Html.ValidationMessageFor(t => t.SoDienThoai)
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(t => t.DiaChi, new { @class = "form-label" })
+                @Html.TextBoxFor(t => t.DiaChi, new { @class = "form-control"})
+                @Html.ValidationMessageFor(t => t.DiaChi)
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(t => t.ChucVu, new { @class = "form-label" })
+                @Html.TextBoxFor(t => t.ChucVu, new { @class = "form-control"})
+                @Html.ValidationMessageFor(t => t.ChucVu)
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(t => t.SoNamCongTac, new { @class = "form-label" })
+                @Html.TextBoxFor(t => t.SoNamCongTac, new { @class = "form-control"})
+                @Html.ValidationMessageFor(t => t.SoNamCongTac,null,new { @class = "form-text text-danger" })
+            </div>
+            <div class="d-flex">
+                <button class="btn btn-success" type="submit">Thêm mới</button>
+                <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
+            </div>
+        }*@
 
 </div>
 
 @section scripts {
-<script>
-    $(function () {
-        $("#NgaySinh").datepicker();
-    });
-</script>
+    <script>
+        $(function () {
+            $("#NgaySinh").datepicker({ dateFormat: 'dd/m/yyyy' });
+        });
+    </script>
 }

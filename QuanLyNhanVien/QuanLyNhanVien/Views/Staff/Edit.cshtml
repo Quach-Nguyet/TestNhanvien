@@ -1,42 +1,60 @@
-﻿
+﻿@model  QuanLyNhanVien.Models.NhanVien
+
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    span #error {
+        color: red;
+    }
+</style>
 
 <h2>Edit</h2>
 
 <div class="card" style="width: 60%; margin: 0 auto;">
-    <form class="card-body" action="/staff/create" method="post">
+    <form class="card-body" action="/staff/edit" method="post">
         <h3>Sửa thông tin nhân viên</h3>
-        @Html.ValidationSummary()
+        <input type="hidden" name="MaNhanVien" value="@Model.MaNhanVien" />
         <div class="mb-3">
-            <label for="HoVaTen" class="form-label">Họ và tên nhân viên</label>
-            <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" />
+            <label for="HoVaTen" class="form-label">Họ và tên nhân viên:</label>
+            <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" value=" @Model.HoVaTen" />
+            <span id="error"> @ViewData["ErrorName"] </span>
         </div>
         <div class="mb-3">
-            <label for="NgaySinh" class="form-label">Ngày sinh</label>
-            <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" />
+            <label for="NgaySinh" class="form-label">Ngày sinh:</label>
+            <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" value="@Html.DisplayFor(x => Model.NgaySinh)" />
         </div>
         <div class="mb-3">
-            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
-            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" />
+            <label for="SoDienThoai" class="form-label">Số điện thoại:</label>
+            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" value="@Model.SoDienThoai" />
+            <span id="error"> @ViewData["ErrorPhone"] </span>
         </div>
         <div class="mb-3">
-            <label for="DiaChi" class="form-label">Địa chỉ</label>
-            <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
+            <label for="DiaChi" class="form-label">Địa chỉ:</label>
+            <input type="text" class="form-control" id="DiaChi" name="DiaChi" value="@Model.DiaChi" />
         </div>
         <div class="mb-3">
-            <label for="ChucVu" class="form-label">Chức vụ</label>
-            <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
+            <label for="ChucVu" class="form-label">Chức vụ: </label>
+            <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="@Model.ChucVu" />
         </div>
         <div class="mb-3">
-            <label for="SoNamCongTac" class="form-label">Số năm công tác</label>
-            <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" />
+            <label for="SoNamCongTac" class="form-label">Số năm công tác: </label>
+            <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" value="@Model.SoNamCongTac" />
         </div>
         <div class="d-flex">
-            <button class="btn btn-success" type="submit">Thêm mới</button>
+            <button class="btn btn-success" type="submit" e> Sửa và lưu </button>
             <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
         </div>
     </form>
-    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(function () {
+            $("#NgaySinh").datepicker();
+        });
+    </script>
+
+    
+}
