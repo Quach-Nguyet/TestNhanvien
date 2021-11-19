@@ -38,7 +38,7 @@ namespace QuanLyNhanVien.Controllers
                     RanDom.SoDienThoai = i + "XXXXXXXXXXX";
                     RanDom.DiaChi = i + "XXXXXXXXXXX";
                     RanDom.ChucVu = i + "XXXXXXXXXXX";
-                    RanDom.SoNamCongTac = i;
+                    RanDom.SoNamCongTac = ""+i;
                     dsNhanVien.Add(RanDom);
                 }
             }
@@ -67,40 +67,45 @@ namespace QuanLyNhanVien.Controllers
         }
 
      
-
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult Create(NhanVienCreateDate date)
+        public ActionResult Create(NhanVien nv)
         {
-
-            var nv = new NhanVien();
             if (ModelState.IsValid)
             {
-                DateTime Date;
                 var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-                nv.MaNhanVien = MaNV(dsNhanVien.Count, date.MaNhanVien);
-                nv.HoVaTen = Fomart.Fomartstring(date.HoVaTen);
-                DateTime.TryParseExact(date.NgaySinh, "dd/M/yyyy", null, System.Globalization.DateTimeStyles.None, out Date);
-                nv.NgaySinh = Date;
-                nv.SoDienThoai = date.SoDienThoai;
-                nv.DiaChi = Fomart.Fomartstring(date.DiaChi);
-                nv.ChucVu = Fomart.Fomartstring(date.ChucVu);
-                nv.SoNamCongTac = date.SoNamCongTac;
+                if (dsNhanVien == null) {
+                    SessionExtension.SetList(DANH_SACH_NHAN_VIEN, new List<NhanVien>());
+                }
+
+                nv.MaNhanVien = MaNV(dsNhanVien.Count, nv.MaNhanVien);
+                nv.HoVaTen = Fomart.Fomartstring(nv.HoVaTen);
+
+                nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
+                nv.ChucVu = Fomart.Fomartstring(nv.ChucVu);
+                bool test = Int32.TryParse(nv.SoNamCongTac, out int nam);
+                if (test != true)
+                {
+                    ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
+                    return View("Create", nv);
+                }
+       
                 foreach (var item in dsNhanVien)
                 {
                     while (nv.HoVaTen == item.HoVaTen)
                     {
                         ViewData["ErrorName"] = "*Tên đã có. Yêu cầu nhập lại";
-                        return Create();
+                        return View("Create", nv);
                     }
 
                     while (nv.SoDienThoai == item.SoDienThoai)
                     {
                         ViewData["ErrorPhone"] = "*Số điện thoại đã có. Yêu cầu nhập lại";
-                        return Create();
+                        return View("Create", nv);
                     }
                 }
                 dsNhanVien.Add(nv);
@@ -125,26 +130,53 @@ namespace QuanLyNhanVien.Controllers
             return View(nv);
         }
         [HttpPost]
-        public ActionResult Edit( NhanVien nvNew)
+        public ActionResult Edit(NhanVien nvNew)
         {
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == nvNew.MaNhanVien);
-                foreach (var item in dsNhanVien)
-                {     
-                if ( nvNew.HoVaTen == item.HoVaTen)
-                {
-                    ViewData["ErrorName"] = "*Tên đã có. Yêu cầu nhập lại";
-                    return View("Edit", nvNew);
-                }
 
-                if (nvNew.SoDienThoai == item.SoDienThoai)
+            //var nv1 = dsNhanVien.FirstOrDefault(t => t.MaNhanVien != nvNew.MaNhanVien && t.HoVaTen.ToLower() == nvNew.HoVaTen.ToLower());
+            foreach (var item in dsNhanVien)
+            {
+                if (nvNew.MaNhanVien != item.MaNhanVien)
                 {
-                    ViewData["ErrorPhone"] = "*Số điện thoại đã có. Yêu cầu nhập lại";
-                    return View("Edit", nvNew);
+                    if (nvNew.HoVaTen == item.HoVaTen)
+                    {
+                        ViewData["ErrorName"] = "*Tên đã có. Yêu cầu nhập lại";
+                        return View("Edit", nvNew);
+                    }
+
+                    if (nvNew.SoDienThoai == item.SoDienThoai)
+                    {
+                        ViewData["ErrorPhone"] = "*Số điện thoại đã có. Yêu cầu nhập lại";
+                        return View("Edit", nvNew);
+                    }
                 }
+                
             }
-            nv = nvNew;
+            nv.MaNhanVien = nvNew.MaNhanVien;
+            nv.HoVaTen = nvNew.HoVaTen;
+            nv.NgaySinh = nvNew.NgaySinh;
+            bool TestPhone = Int32.TryParse(nvNew.SoDienThoai, out int Phone);
+            if (TestPhone == true && nvNew.SoDienThoai.Length == 10)
+            {
+                nv.SoDienThoai = nvNew.SoDienThoai;
+            }
+            else
+            {
+                ViewData["ErrorFormatPhone"] = "* Số điện thoại không tồn tại. yêu cầu nhập lại ";
+                return View("Edit", nvNew);
+            }
+
+            nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
+            nv.ChucVu = Fomart.Fomartstring(nvNew.ChucVu);
+            bool test = Int32.TryParse(nvNew.SoNamCongTac, out int nam);
+            if (test != true)
+            {
+                ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
+                return View("Edit", nvNew);
+            }
+
             return View("Index",dsNhanVien);
         }
 
