@@ -6,8 +6,8 @@
 }
 
 <style>
-    span #error{
-        color:red;
+    span #error {
+        color: red;
     }
 </style>
 
@@ -15,82 +15,82 @@
     <form class="card-body" action="/staff/create" method="post">
         <h3>Thêm mới nhân viên</h3>
         @Html.ValidationSummary()
-        <input type="hidden" name="MaNhanVien"/>
+        <input type="hidden" name="MaNhanVien" />
         <div class="mb-3">
             <label for="HoVaTen" class="form-label">Họ và tên nhân viên</label>
-            @{ var nv = @Model ;}
-                @if (nv != null)
-                {
+            @{ var nv = @Model;}
+            @if (nv != null)
+            {
                 <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" value="@nv.HoVaTen" />
-                }
-                else
-                {
-                <input type="text" class="form-control" id="HoVaTen" name="HoVaTen"/>
+            }
+            else
+            {
+                <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" />
 
-            <span id="error"> @ViewData["ErrorName"] </span> }
+                <span id="error"> @ViewData["ErrorName"] </span>}
         </div>
         <div class="mb-3">
             <label for="NgaySinh" class="form-label">Ngày sinh</label>
             @if (nv != null)
-                {
-            <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" value="@nv.NgaySinh" />
-                }
-                else
-                {
-            <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" />
+            {
+                <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" value="@nv.NgaySinh" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="NgaySinh" name="NgaySinh" />
 
-            <span id="error"> @ViewData["ErrorDay"] </span>
-                }
+                <span id="error"> @ViewData["ErrorDay"] </span>
+            }
 
         </div>
         <div class="mb-3">
             <label for="SoDienThoai" class="form-label">Số điện thoại</label>
-           
-                  @if(nv != null)
-                  {
-                      <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" value="@nv.SoDienThoai"/>
-                  }
-                  else
-                  {
-                      <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai"/>
-                  }
+
+            @if (nv != null)
+            {
+                <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" value="@nv.SoDienThoai" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" />
+            }
             <span id="error"> @ViewData["ErrorPhone"] </span>
             <span id="error"> @ViewData["ErrorFormatPhone"] </span>
         </div>
         <div class="mb-3">
             <label for="DiaChi" class="form-label">Địa chỉ</label>
-            
-                  @if(nv != null)
-                  {
-                      <input type="text" class="form-control" id="DiaChi" name="DiaChi" value="@nv.DiaChi"/>
-                  }
-                  else
-                  {
-                      <input type="text" class="form-control" id="DiaChi" name="DiaChi"/>
-                  }
+
+            @if (nv != null)
+            {
+                <input type="text" class="form-control" id="DiaChi" name="DiaChi" value="@nv.DiaChi" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
+            }
         </div>
         <div class="mb-3">
             <label for="ChucVu" class="form-label">Chức vụ</label>
-            
-                  @if(nv != null)
-                  {
-                      <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="@nv.ChucVu"/>
-                  }
-                  else
-                  {
-                      <input type="text" class="form-control" id="ChucVu" name="ChucVu"/>
-                  }
+
+            @if (nv != null)
+            {
+                <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="@nv.ChucVu" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="ChucVu" name="ChucVu" />
+            }
         </div>
         <div class="mb-3">
             <label for="SoNamCongTac" class="form-label">Số năm công tác</label>
-                  @if(nv != null)
-                  {
-                      <input type="text" class="form-control"  id="SoNamCongTac" name="SoNamCongTac" value="@nv.SoNamCongTac"/>
-                  }
-                  else
-                  {
-                      <input type="text" class="form-control"  id="SoNamCongTac" name="SoNamCongTac"/>
-                  }
+            @if (nv != null)
+            {
+                <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" value="@nv.SoNamCongTac" />
+            }
+            else
+            {
+                <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" />
+            }
             <span id="error"> @ViewData["ErrorYear"] </span>
         </div>
         <div class="d-flex">
@@ -138,6 +138,10 @@
         }*@
 
 </div>
+@Scripts.Render("~/Scripts/jquery-3.1.1.js")
+@Scripts.Render("~/Scripts/jquery.validate.min.js")
+@Scripts.Render("~/Scripts/jquery.validate.unobtrusive.min.js")
+@Scripts.Render("~/Scripts/moment.js")
 
 @section scripts {
     <script>

@@ -12,6 +12,7 @@ namespace QuanLyNhanVien.Models
         public string HoVaTen { get; set; }
 
         [Required(ErrorMessage = "Ngày sinh không được để trống")]
+        [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/M/yyyy}")]
         public DateTime NgaySinh { get; set; }
 

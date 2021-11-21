@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    span #error{
-       color: red;
+    span #error {
+        color: red;
     }
 </style>
 
@@ -52,6 +52,12 @@
     </form>
 </div>
 
+<%: Scripts.Render("~/Scripts/jquery.validate.min.js") %> <%:Scripts.Render("~/Scripts/jquery.validate.unobtrusive.min.js") %>
+@Scripts.Render("~/Scripts/jquery-3.1.1.js")
+@Scripts.Render("~/Scripts/jquery.validate.min.js")
+@Scripts.Render("~/Scripts/jquery.validate.unobtrusive.min.js")
+@Scripts.Render("~/Scripts/moment.js")
+
 @section scripts {
     <script>
         $(function () {
@@ -59,5 +65,4 @@
         });
     </script>
 
-    
 }
