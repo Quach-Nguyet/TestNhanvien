@@ -77,3 +77,7 @@ E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Microsoft.CodeDo
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.csproj.CopyComplete
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.dll
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.pdb
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Net.Http.Formatting.dll
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Web.Http.dll
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Net.Http.Formatting.xml
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Web.Http.xml

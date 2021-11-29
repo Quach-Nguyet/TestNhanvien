@@ -1,0 +1,292 @@
+﻿@model  List<QuanLyNhanVien.Models.NhanVien>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Kết thúc -->
+<style>
+    span {
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="header d-flex">
+        <a class="btn btn-outline-primary" style="width: 10%" href="/Nv/create" data-toggle="modal" data-target="#ThemNhanVien">Thêm mới</a>
+        <div style="margin-left:2%; width: 88%">
+            <form action="/Nv/Search" type="submit" name="Mess">
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa cần tìm" />
+                <span>@ViewData["Messeger"]</span>
+            </form>
+        </div>
+    </div>
+    <div class="mt-3">
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>Mã nhân viên</th>
+                    <th>Họ tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Địa chỉ</th>
+                    <th>SĐT</th>
+                    <th>Chức vụ</th>
+                    <th id="nam" style="text-align:center">Số năm công tác</th>
+                    <th>Lựa chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.MaNhanVien</td>
+                        <td>@item.HoVaTen</td>
+                        <td>@Html.DisplayFor(x => item.NgaySinh) </td>
+                        <td>@item.DiaChi</td>
+                        <td>@item.SoDienThoai</td>
+                        <td>@item.ChucVu</td>
+                        <td>@item.SoNamCongTac</td>
+                        <td>
+                            <a class="btn btn-secondary btn-sm" onclick="openEditPopup('@item.MaNhanVien')">Sửa</a>
+                            <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#Xoanv-@item.MaNhanVien">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @*<modal xoa>*@
+        @foreach (var item in Model)
+        {
+            <div class="modal fade" id="Xoanv-@item.MaNhanVien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Xóa Nhân Viên</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn chắc chắn muốn xóa nhân viên này?
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-primary" href="/nv/delete?ma=@item.MaNhanVien">Yes</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No, thanks</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*<Modal search>*@
+        <div class="modal fade" id="Messeger" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Lỗi</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<Modal them>*@
+    <div class="modal fade" id="ThemNhanVien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">
+                        Thêm thông tin nhân viên
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="card-body" action="/nv/create" method="post">
+                        <input type="hidden" name="MaNhanVien" />
+                        <div class="mb-3">
+                            <label for="HoVaTen" class="form-label">Họ và tên nhân viên:</label>
+                            <input type="text" class="form-control" id="HoVaTen" name="HoVaTen" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="NgaySinh" class="form-label">Ngày sinh:</label>
+                            <input type="text" class="js-date form-control" name="NgaySinh" placeholder="dd/mm/yyyy" required />
+                            <div class="invalid-feedback">
+                                Please choose a Date.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoDienThoai" class="form-label">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="DiaChi" class="form-label">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="DiaChi" name="DiaChi" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="ChucVu" class="form-label">Chức vụ: </label>
+                            <input type="text" class="form-control" id="ChucVu" name="ChucVu" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoNamCongTac" class="form-label">Số năm công tác: </label>
+                            <input type="text" class="form-control" id="SoNamCongTac" name="SoNamCongTac" />
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn btn-success" type="submit" e> Lưu </button>
+                            <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*<Modal sua>*@
+    <div class="modal fade" id="SuaNhanVien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">
+                        Sửa thông tin nhân viên
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <form class="card-body needs-validation" id="Sua" novalidate action="/nv/edit" method="post">
+                        <input type="hidden" name="MaNhanVien"/>
+                        <div class="mb-3">
+                            <label for="HoVaTen" class="form-label">Họ và tên nhân viên:</label>
+                            <input type="text" class="form-control" id="Sua_HoVaTen" name="HoVaTen" required />
+                            <span id="error"> @ViewData["ErrorName"] </span>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NgaySinh" class="form-label">Ngày sinh:</label>
+                            <input type="text" class="js-date form-control" id="Sua_NgaySinh" name="NgaySinh" placeholder="dd/mm/yyyy" required />
+                            <span id="error"> @ViewData["ErrorDay"] </span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoDienThoai" class="form-label">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="Sua_SoDienThoai" name="SoDienThoai" />
+                            <span id="error"> @ViewData["ErrorPhone"] </span>
+                            <span id="error"> @ViewData["ErrorFormatPhone"] </span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="DiaChi" class="form-label">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="Sua_DiaChi" name="DiaChi" />
+                            <div class="invalid-feedback">
+                                Please choose a adress.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ChucVu" class="form-label">Chức vụ: </label>
+                            <input type="text" class="form-control" id="Sua_ChucVu" name="ChucVu" />
+                            <div class="invalid-feedback">
+                                Please choose a potsion.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoNamCongTac" class="form-label">Số năm công tác: </label>
+                            <input type="text" class="form-control" id="Sua_SoNamCongTac" name="SoNamCongTac" />
+                            <span id="error"> @ViewData["ErrorYear"] </span>
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn btn-success" type="submit" onclick="luuNhanVien"> Sửa và lưu </button>
+                            <a class="btn btn-outline-secondary" style="margin-left: 1rem;" href="/">Hủy</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/dependencyLibs/inputmask.dependencyLib.js"></script>
+    <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/inputmask.js"></script>
+    <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/inputmask.date.extensions.js"></script>
+    <script>
+        Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('.needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+    <script>
+        function Search() {
+            var test1 = $('#Mess').val();
+            if (test1 == "*Tên đã có. Yêu cầu nhập lại")
+                $("#Messeger").modal('show');
+        }
+        function openEditPopup(maNhanVien) {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+
+            fetch("/Nv/Edit?maNhanVien=" + maNhanVien, requestOptions)
+                .then(response => response.json())
+                .then(jData => {
+
+                    $('#SuaNhanVien').modal('show')
+                    document.getElementsByName('MaNhanVien').value = jData.MaNhanVien,
+                    document.getElementById('Sua_HoVaTen').value = jData.HoVaTen,
+                    document.getElementById('Sua_NgaySinh').value = jData.NgaySinh,
+                    document.getElementById('Sua_DiaChi').value = jData.DiaChi,
+                    document.getElementById('Sua_SoDienThoai').value = jData.SoDienThoai,
+                    document.getElementById('Sua_ChucVu').value = jData.ChucVu,
+                    document.getElementById('Sua_SoNamCongTac').value = jData.SoNamCongTac
+                })
+                .catch(error => console.log('error', error));
+        }
+
+        function luuNhanVien(submit) {
+
+            var requestOptions = {
+                method: 'POST',
+                redirect: 'follow',
+                contentType: 'application/json',
+                data: JSON.stringify(nv)
+            };
+            const nv = {
+                MaNhanVien: document.getElementsByName('MaNhanVien').value,
+                HoVaTen: document.getElementById('Sua_HoVaTen').value,
+                NgaySinh: document.getElementById('Sua_NgaySinh').value,
+                SoDienThoai: document.getElementById('Sua_SoDienThoai').value,
+                DiaChi: document.getElementById('Sua_DiaChi').value,
+                ChucVu: document.getElementById('Sua_ChucVu').value,
+                SoNamCongTac: document.getElementById('Sua_SoNamCongTac').value
+            }
+
+            fetch("/Nv/Edit", requestOptions)
+        }
+    </script>
+} 

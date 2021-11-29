@@ -16,7 +16,7 @@ namespace QuanLyNhanVien
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Staff", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Nv", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

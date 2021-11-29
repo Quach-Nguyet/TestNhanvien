@@ -9,6 +9,7 @@ namespace QuanLyNhanVien.Models
     {
         public static string Fomartstring(string item)
         {
+            if (item == null) return null;
             string afterFm = "";
             if (item.Length > 0)
             {

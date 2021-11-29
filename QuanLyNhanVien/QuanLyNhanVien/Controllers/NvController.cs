@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 
 namespace QuanLyNhanVien.Controllers
 {
-
-    public class StaffController : Controller
+    public class NvController : Controller
     {
         private readonly string DANH_SACH_NHAN_VIEN = "DanhSachNhanVien";
         private readonly string NHAN_VIEN = "NhanVien";
@@ -40,7 +40,7 @@ namespace QuanLyNhanVien.Controllers
                     RanDom.SoDienThoai = i + "XXXXXXXXXXX";
                     RanDom.DiaChi = i + "XXXXXXXXXXX";
                     RanDom.ChucVu = i + "XXXXXXXXXXX";
-                    RanDom.SoNamCongTac = ""+i;
+                    RanDom.SoNamCongTac = "" + i;
                     dsNhanVien.Add(RanDom);
                 }
             }
@@ -59,16 +59,16 @@ namespace QuanLyNhanVien.Controllers
             || item.SoNamCongTac.ToString().Contains(keyword.Trim()));
             if (result.Count != 0)
             {
-                return View("Index", result);
+                return Content(JsonConvert.SerializeObject(result), "application/json", Encoding.UTF8);
             }
             else
             {
                 ViewData["Messeger"] = "* Không tìm thấy dữ liệu";
-                return View("Index", dsNhanVien);
+                return Content(JsonConvert.SerializeObject(dsNhanVien), "application/json", Encoding.UTF8);
             }
         }
 
-     
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -80,7 +80,8 @@ namespace QuanLyNhanVien.Controllers
             if (ModelState.IsValid)
             {
                 var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-                if (dsNhanVien == null) {
+                if (dsNhanVien == null)
+                {
                     SessionExtension.SetList(DANH_SACH_NHAN_VIEN, new List<NhanVien>());
                 }
 
@@ -95,7 +96,7 @@ namespace QuanLyNhanVien.Controllers
                     ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
                     return View("Create", nv);
                 }
-       
+
                 foreach (var item in dsNhanVien)
                 {
                     while (nv.HoVaTen == item.HoVaTen)
@@ -118,6 +119,8 @@ namespace QuanLyNhanVien.Controllers
             }
             return View(nv);
         }
+
+        [HttpGet]
         public ActionResult Edit(string maNhanVien)
         {
             if (maNhanVien == null)
@@ -128,8 +131,8 @@ namespace QuanLyNhanVien.Controllers
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
 
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
-            
-            return View(nv);
+             Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
+             return View(nv);
         }
         [HttpPost]
         public ActionResult Edit(NhanVien nvNew)
@@ -145,16 +148,16 @@ namespace QuanLyNhanVien.Controllers
                     if (nvNew.HoVaTen == item.HoVaTen)
                     {
                         ViewData["ErrorName"] = "*Tên đã có. Yêu cầu nhập lại";
-                        return View("Edit", nvNew);
+                        return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8); //return View("Edit", nvNew);
                     }
 
                     if (nvNew.SoDienThoai == item.SoDienThoai)
                     {
                         ViewData["ErrorPhone"] = "*Số điện thoại đã có. Yêu cầu nhập lại";
-                        return View("Edit", nvNew);
+                        return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);// return View("Edit", nvNew);
                     }
                 }
-                
+
             }
             nv.MaNhanVien = nvNew.MaNhanVien;
             nv.HoVaTen = nvNew.HoVaTen;
@@ -167,7 +170,8 @@ namespace QuanLyNhanVien.Controllers
             else
             {
                 ViewData["ErrorFormatPhone"] = "* Số điện thoại không tồn tại. yêu cầu nhập lại ";
-                return View("Edit", nvNew);
+                // return View("Edit", nvNew);
+                return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);
             }
 
             nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
@@ -176,47 +180,35 @@ namespace QuanLyNhanVien.Controllers
             if (test != true)
             {
                 ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
-                return View("Edit", nvNew);
+                //return View("Edit", nvNew);
+                return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);
             }
 
-            return View("Index",dsNhanVien);
+            return View("Index", dsNhanVien);
         }
 
         public ActionResult Delete(string ma)
         {
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == ma);
+            var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == ma);
             dsNhanVien.Remove(nv);
             SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
             return View("Index", dsNhanVien);
+        }
+
+        public ActionResult ChiTietNhanVien(string maNhanVien)
+        {
+            var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
+            NhanVien nv = new NhanVien();
+            
+                nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
+            return Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
+
         }
         public ActionResult Report()
         {
             return View();
         }
-
-        [HttpGet]
-        public ActionResult demo(string sKey)
-        {
-            try
-            {
-                if (sKey != "jashklashflsi;lfgeol;a")
-                    return Content("Sai key rồi","application/json",Encoding.UTF8);
-                var nv = new NhanVien()
-                {
-                    HoVaTen = "Ắn Nguyệt",
-                    ChucVu = "Nóc nhà",
-                    DiaChi = "Cầu Giấy"
-                };
-                return Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
-
 
     }
 }
