@@ -64,7 +64,7 @@ namespace QuanLyNhanVien.Controllers
             else
             {
                 ViewData["Messeger"] = "* Không tìm thấy dữ liệu";
-                return Content(JsonConvert.SerializeObject(dsNhanVien), "application/json", Encoding.UTF8);
+                return Json(dsNhanVien);
             }
         }
 
@@ -94,7 +94,8 @@ namespace QuanLyNhanVien.Controllers
                 if (test != true)
                 {
                     ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
-                    return View("Create", nv);
+                    //return View("Create", nv);
+                    return Json(nv);
                 }
 
                 foreach (var item in dsNhanVien)
@@ -102,37 +103,46 @@ namespace QuanLyNhanVien.Controllers
                     while (nv.HoVaTen == item.HoVaTen)
                     {
                         ViewData["ErrorName"] = "*Tên đã có. Yêu cầu nhập lại";
-                        return View("Create", nv);
+                        return Json(nv);
                     }
 
                     while (nv.SoDienThoai == item.SoDienThoai)
                     {
                         ViewData["ErrorPhone"] = "*Số điện thoại đã có. Yêu cầu nhập lại";
-                        return View("Create", nv);
+                        return Json(nv);
                     }
                 }
                 dsNhanVien.Add(nv);
 
                 SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
 
-                return View("Index", dsNhanVien);
+                return Json(dsNhanVien);
+               // return Json(new { success = true });
             }
-            return View(nv);
+            return Json(new { success = true });
         }
 
         [HttpGet]
         public ActionResult Edit(string maNhanVien)
         {
-            if (maNhanVien == null)
 
+            if (string.IsNullOrWhiteSpace(maNhanVien))
             {
-                return View();
+                return Json(new
+                {
+                    success = false,
+                    msg = "Mã nhân viên không được phép trống"
+                });
             }
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
 
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
-             Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
-             return View(nv);
+            return Json(new
+            {
+                success = true,
+                data = nv
+            }, JsonRequestBehavior.AllowGet);
+
         }
         [HttpPost]
         public ActionResult Edit(NhanVien nvNew)
@@ -148,13 +158,13 @@ namespace QuanLyNhanVien.Controllers
                     if (nvNew.HoVaTen == item.HoVaTen)
                     {
                         ViewData["ErrorName"] = "*Tên đã có. Yêu cầu nhập lại";
-                        return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8); //return View("Edit", nvNew);
+                        return Json(nvNew);
                     }
 
                     if (nvNew.SoDienThoai == item.SoDienThoai)
                     {
                         ViewData["ErrorPhone"] = "*Số điện thoại đã có. Yêu cầu nhập lại";
-                        return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);// return View("Edit", nvNew);
+                        return Json(nvNew);
                     }
                 }
 
@@ -170,8 +180,7 @@ namespace QuanLyNhanVien.Controllers
             else
             {
                 ViewData["ErrorFormatPhone"] = "* Số điện thoại không tồn tại. yêu cầu nhập lại ";
-                // return View("Edit", nvNew);
-                return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);
+                return Json(nvNew);
             }
 
             nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
@@ -180,11 +189,10 @@ namespace QuanLyNhanVien.Controllers
             if (test != true)
             {
                 ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
-                //return View("Edit", nvNew);
-                return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);
+                return Json(nvNew);
             }
-
-            return View("Index", dsNhanVien);
+            return Json(dsNhanVien);
+            //return Json(new { success = true});
         }
 
         public ActionResult Delete(string ma)
@@ -193,7 +201,7 @@ namespace QuanLyNhanVien.Controllers
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == ma);
             dsNhanVien.Remove(nv);
             SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
-            return View("Index", dsNhanVien);
+            return Json(dsNhanVien);
         }
 
         public ActionResult ChiTietNhanVien(string maNhanVien)
@@ -202,7 +210,7 @@ namespace QuanLyNhanVien.Controllers
             NhanVien nv = new NhanVien();
             
                 nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
-            return Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
+            return Json(nv);
 
         }
         public ActionResult Report()
