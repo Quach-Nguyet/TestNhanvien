@@ -117,7 +117,7 @@ namespace QuanLyNhanVien.Controllers
                 SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
 
                 return Json(dsNhanVien);
-               // return Json(new { success = true });
+                // return Json(new { success = true });
             }
             return Json(new { success = true });
         }
@@ -208,8 +208,8 @@ namespace QuanLyNhanVien.Controllers
         {
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
             NhanVien nv = new NhanVien();
-            
-                nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
+
+            nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
             return Json(nv);
 
         }

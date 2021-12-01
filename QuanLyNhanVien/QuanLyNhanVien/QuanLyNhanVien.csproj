@@ -130,6 +130,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ApiStaffController.cs" />
     <Compile Include="Controllers\NvController.cs" />
+    <Compile Include="Controllers\SachController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Extensions\SessionExtension.cs" />
     <Compile Include="Global.asax.cs">
@@ -194,6 +195,7 @@
     <Content Include="Views\Staff\Update.cshtml" />
     <Content Include="Views\Staff\Report.cshtml" />
     <Content Include="Views\Nv\Index.cshtml" />
+    <Content Include="Views\Sach\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

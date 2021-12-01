@@ -1,0 +1,312 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section stylesheets{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+}
+
+<div class="container">
+    <div class="content-header">
+        <button class="btn btn-outline-primary" onclick="$('#formThemMoi').modal('show')">Thêm mới</button>
+    </div>
+    <div class="content-sach-table">
+        <table class="table table-striped" id="sach-table">
+            <thead>
+                <tr>
+                    <th>Mã sách</th>
+                    <th>Tên sách</th>
+                    <th>Nhà xuất bản</th>
+                    <th>Ngày xuất bản</th>
+                    <th>Số trang</th>
+                    <th>Trạng thái</th>
+                    <th>Lựa chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="formThemMoi" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        Thêm mới dữ liệu
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <form class="card-body" method="post" id="form-them-moi">
+                        <div class="mb-3">
+                            <label for="TenSach" class="form-label">Tên sách</label>
+                            <input type="text" class="form-control TenSach" name="TenSach">
+                            <small class="TenSach_message"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NhaXuatBan" class="form-label">Nhà xuất bản</label>
+                            <input type="text" class="form-control NhaXuatBan" name="NhaXuatBan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="NgayXuatBan" class="form-label">Ngày xuất bản</label>
+                            <input type="text" class="form-control datepicker NgayXuatBan" autocomplete="off" name="NgayXuatBan">
+                            <small class="NgayXuatBan_message"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoTrang" class="form-label">Số trang</label>
+                            <input type="number" class="form-control SoTrang" name="SoTrang">
+                            <small class="SoTrang_message"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TrangThai" class="form-label">Đang xuất bản</label>
+                            <input type="checkbox" class="form-check-input TrangThai" name="TrangThai">
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-success btn-save">Lưu</button>
+                            <button class="btn btn-outline-secondary" onclick="$('#formThemMoi').modal('hide')">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="formSua" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        Sửa thông tin
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <form class="card-body" method="post" id="form-sua">
+                        <input type="text" class="form-control Id" name="Id" />
+                        <div class="mb-3">
+                            <label for="TenSach" class="form-label">Tên sách</label>
+                            <input type="text" class="form-control TenSach" name="TenSach">
+                            <small class="TenSach_message"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NhaXuatBan" class="form-label">Nhà xuất bản</label>
+                            <input type="text" class="form-control NhaXuatBan" name="NhaXuatBan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="NgayXuatBan" class="form-label">Ngày xuất bản</label>
+                            <input type="text" class="form-control datepicker NgayXuatBan" autocomplete="off" name="NgayXuatBan">
+                            <small class="NgayXuatBan_message"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoTrang" class="form-label">Số trang</label>
+                            <input type="number" class="form-control SoTrang" name="SoTrang">
+                            <small class="SoTrang_message"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TrangThai" class="form-label">Đang xuất bản</label>
+                            <input type="checkbox" class="form-check-input TrangThai" name="TrangThai">
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-success btn-save">Lưu</button>
+                            <button class="btn btn-outline-secondary" onclick="$('#formSua').modal('hide')">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>//anh cài thêm thư viện moment => em chuyển vào layout.cshtml.  moment dùng để xử lý datetime nhé</script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+
+    <script>//anh cài thêm thư viện toast => em chuyển vào layout.cshtml. toast dùng để hiện các thông báo nhé nhé</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(() => {
+            //set datapicker
+            $(".datepicker").datepicker();
+
+            //Khi trang mở lên thì lấy danh sách data
+            $.ajax('/Sach/GetList').then(res => {
+                let tbody = '<tr>'
+                res.Data.forEach(item => {
+                    tbody += `<td>${item.Id}</td>`
+                    tbody += `<td>${item.TenSach}</td>`
+                    tbody += `<td>${item.NhaXuatBan}</td>`
+                    tbody += `<td>${moment(item.NgayXuatBan).format('DD/MM/YYYY')}</td>`
+                    tbody += `<td>${item.SoTrang}</td>`
+                    tbody += `<td>${item.TrangThai ? 'Đang xuất bản' : 'Dừng xuất bản'}</td>`
+                    tbody += `<td><button class="btn btn-outline-secondary btnEdit" data-id="${item.Id}">Sửa</button> <button class="btn btn-outline-danger btnXoa" data-id="${item.Id}">Xóa</button></td>`
+                })
+                tbody += '</tr>'
+                $('#sach-table tbody').append(tbody)
+            }).catch(error => {
+                console.log(error)
+            })
+            //
+
+            //Hành động khi click button sửa
+            $('#sach-table').on('click', '.btnEdit', function (event) {
+                const dataId = $(this).attr('data-id')
+                // lấy id của sách
+                // gọi server để lấy chi tiết sách đổ vào modal sửa
+                $.ajax('/Sach/Get?id=' + dataId).then(res => {
+                    const sach = res.Data
+                    $('#form-sua').find('.Id').val(sach.Id)
+                    $('#form-sua').find('.TenSach').val(sach.TenSach)
+                    $('#form-sua').find('.NhaXuatBan').val(sach.NhaXuatBan)
+                    $('#form-sua').find('.NgayXuatBan').val(moment(sach.NgayXuatBan).format('DD/MM/YYYY'))
+                    $('#form-sua').find('.SoTrang').val(sach.SoTrang)
+                    $('#form-sua').find('.TrangThai').prop('checked', true);
+
+                    $('#formSua').modal('show');
+                }).catch(error => console.log(error))
+            })
+
+            //Hành động khi click button lưu trong form sửa
+            $('#form-sua').on('click', '.btn-save', function (event) {
+                event.preventDefault()
+                const data = {
+                    Id: $('#form-sua').find('.Id').val(),
+                    TenSach: $('#form-sua').find('.TenSach').val(),
+                    NhaXuatBan: $('#form-sua').find('.NhaXuatBan').val(),
+                    NgayXuatBan: $('#form-sua').find('.NgayXuatBan').val(),
+                    SoTrang: $('#form-sua').find('.SoTrang').val(),
+                    TrangThai: $('#form-sua').find('.TrangThai').is(':checked')
+                }
+
+                // validate data
+                let isValid = true
+                if (data.TenSach == null || data.TenSach == '') {
+                    $.toast({
+                        heading: 'Thông báo',
+                        text: 'Bạn chưa nhập tên sách',
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                    isValid = false
+                }
+                if (data.NgayXuatBan == null || data.NgayXuatBan == '') {
+                    $.toast({
+                        heading: 'Thông báo',
+                        text: 'Bạn chưa nhập ngày xuất bản',
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                    isValid = false
+                }
+                if (data.SoTrang == null || data.SoTrang == '') {
+                    $.toast({
+                        heading: 'Thông báo',
+                        text: 'Bạn chưa nhập số trang',
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                    isValid = false
+                }
+                if (!isValid) return
+                //
+
+                // gọi server để sửa
+                $.ajax({
+                    url: '/Sach/Edit',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: res => {
+                        if (res.Status == 1) location.reload()
+                        else {
+                            $.toast({
+                                heading: 'Thông báo',
+                                text: res.Message,
+                                showHideTransition: 'fade',
+                                icon: 'error'
+                            })
+                        }
+                    },
+                    error: res => $.toast({
+                        heading: 'Thông báo',
+                        text: res,
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                })
+            })
+
+
+            //Hành động khi click button lưu trong form thêm
+            $('#form-them-moi').on('click', '.btn-save', function (event) {
+                event.preventDefault()
+                const data = {
+                    TenSach: $('#form-them-moi').find('.TenSach').val(),
+                    NhaXuatBan: $('#form-them-moi').find('.NhaXuatBan').val(),
+                    NgayXuatBan: $('#form-them-moi').find('.NgayXuatBan').val(),
+                    SoTrang: $('#form-them-moi').find('.SoTrang').val(),
+                    TrangThai: $('#form-them-moi').find('.TrangThai').is(':checked')
+                }
+                // validate data
+                let isValid = true
+                if (data.TenSach == null || data.TenSach == '') {
+                    $.toast({
+                        heading: 'Thông báo',
+                        text: 'Bạn chưa nhập tên sách',
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                    isValid = false
+                }
+                if (data.NgayXuatBan == null || data.NgayXuatBan == '') {
+                    $.toast({
+                        heading: 'Thông báo',
+                        text: 'Bạn chưa nhập ngày xuất bản',
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                    isValid = false
+                }
+                if (data.SoTrang == null || data.SoTrang == '') {
+                    $.toast({
+                        heading: 'Thông báo',
+                        text: 'Bạn chưa nhập số trang',
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                    isValid = false
+                }
+                if (!isValid) return
+                //
+
+                // gọi server để thêm mới
+                $.ajax({
+                    url: '/Sach/Create',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: res => {
+                        if (res.Status == 1) location.reload()
+                        else {
+                            $.toast({
+                                heading: 'Thông báo',
+                                text: res.Message,
+                                showHideTransition: 'fade',
+                                icon: 'error'
+                            })
+                        }
+                    },
+                    error: res => $.toast({
+                        heading: 'Thông báo',
+                        text: res,
+                        showHideTransition: 'fade',
+                        icon: 'error'
+                    })
+                })
+            })
+
+        })
+    </script>
+}
