@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-
+    Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
+    //
     $(document).ready(function () {
         $("#Sreach").on("keyup", function () {
             var value = $(this).val().toLowerCase();
@@ -8,7 +9,6 @@
             });
         });
     });
-
 
      openEditPopup= function(maNhanVien) {
         $.ajax({
@@ -37,7 +37,6 @@
         let id = $(this).attr("data-id");
         openEditPopup(id);
     })
-
 
 
     themNhanVien = function () {
@@ -91,7 +90,7 @@
                 }
             });
     });
-    $('#Sua').onclick(function (ex) {
+    $('#Sua').click(function (ex) {
         ex.preventDefault();
         let nvNew = {
             MaNhanVien: $('#Sua_MaNhanVien').val(),
