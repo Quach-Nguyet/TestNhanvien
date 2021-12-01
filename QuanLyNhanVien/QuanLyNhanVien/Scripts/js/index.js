@@ -1,4 +1,15 @@
 ﻿$(document).ready(function () {
+
+    $(document).ready(function () {
+        $("#Sreach").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tableNhanVien tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+
      openEditPopup= function(maNhanVien) {
         $.ajax({
             method: "GET",
@@ -94,7 +105,7 @@
 
         $.ajax({
             method: "POST",
-            url: "/Nv/edit",
+            url: "/Nv/Edit",
             data: nvNew
         })
             .done(function (response) {
@@ -105,12 +116,5 @@
             });
     });
 
-    $("#Sreach").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#tableNhanVien tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-
-        });
-    });
-    
+  
 });
