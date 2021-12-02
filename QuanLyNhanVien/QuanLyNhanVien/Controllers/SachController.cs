@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using QuanLyNhanVien.Extensions;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -24,19 +25,19 @@ namespace QuanLyNhanVien.Controllers
         {
             var dsSach = SessionExtension.GetList<Sach>(_sachSessionKey);
             //tạo response cho client
-            //fake 1 số dữ liệu
-            dsSach = new System.Collections.Generic.List<Sach>();
-            dsSach.Add(new Sach()
-            {
-                Id = Guid.NewGuid(),
-                TenSach = "SGK lớp 1",
-                NgayXuatBan = DateTime.Now,
-                NhaXuatBan = "Kim Đồng",
-                SoTrang = 300,
-                TrangThai = true
-            });
-            SessionExtension.SetList<Sach>(_sachSessionKey,dsSach);
-            //
+            ////fake 1 số dữ liệu
+            //dsSach = new System.Collections.Generic.List<Sach>();
+            //dsSach.Add(new Sach()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    TenSach = "SGK lớp 1",
+            //    NgayXuatBan = DateTime.Now,
+            //    NhaXuatBan = "Kim Đồng",
+            //    SoTrang = 300,
+            //    TrangThai = true
+            //});
+            //SessionExtension.SetList<Sach>(_sachSessionKey,dsSach);
+            ////
             var response = new ResponseModel(dsSach, "Lấy dữ liệu thành công!");
             return Content(JsonConvert.SerializeObject(response), "application/json", Encoding.UTF8);
         }
@@ -61,6 +62,7 @@ namespace QuanLyNhanVien.Controllers
             };
             // thêm vào session
             var dsSach = SessionExtension.GetList<Sach>(_sachSessionKey);
+            if (dsSach == null) dsSach = new List<Sach>();
             dsSach.Add(sach);
             SessionExtension.SetList<Sach>(_sachSessionKey, dsSach);
 
