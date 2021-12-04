@@ -196,6 +196,7 @@
     <Content Include="Views\Staff\Report.cshtml" />
     <Content Include="Views\Nv\Index.cshtml" />
     <Content Include="Views\Sach\Index.cshtml" />
+    <Content Include="Views\Nv\_DanhSachNV.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

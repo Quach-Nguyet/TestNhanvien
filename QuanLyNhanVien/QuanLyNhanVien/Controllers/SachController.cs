@@ -25,18 +25,30 @@ namespace QuanLyNhanVien.Controllers
             var dsSach = SessionExtension.GetList<Sach>(_sachSessionKey);
             //tạo response cho client
             //fake 1 số dữ liệu
-            dsSach = new System.Collections.Generic.List<Sach>();
-            dsSach.Add(new Sach()
+            // dsSach = new System.Collections.Generic.List<Sach>();
+            // dsSach.Add(new Sach()
+            // {
+            //     Id = Guid.NewGuid(),
+            //     TenSach = "SGK lớp 1",
+            //     NgayXuatBan = DateTime.Now,
+            //     NhaXuatBan = "Kim Đồng",
+            //     SoTrang = 300,
+            //     TrangThai = true
+            // });
+             SessionExtension.SetList<Sach>(_sachSessionKey,dsSach);
+             if (dsSach == null)
             {
-                Id = Guid.NewGuid(),
-                TenSach = "SGK lớp 1",
-                NgayXuatBan = DateTime.Now,
-                NhaXuatBan = "Kim Đồng",
-                SoTrang = 300,
-                TrangThai = true
-            });
-            SessionExtension.SetList<Sach>(_sachSessionKey,dsSach);
-            //
+                dsSach = new System.Collections.Generic.List<Sach>();
+                dsSach.Add(new Sach()
+                {
+                    Id = Guid.NewGuid(),
+                    TenSach = "SGK lớp 1",
+                    NgayXuatBan = DateTime.Now,
+                    NhaXuatBan = "Kim Đồng",
+                    SoTrang = 300,
+                    TrangThai = true
+                });
+            }
             var response = new ResponseModel(dsSach, "Lấy dữ liệu thành công!");
             return Content(JsonConvert.SerializeObject(response), "application/json", Encoding.UTF8);
         }

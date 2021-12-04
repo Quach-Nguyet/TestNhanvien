@@ -1,0 +1,38 @@
+﻿
+@model List<QuanLyNhanVien.Models.NhanVien>
+
+<table class="table table-responsive table-striped" id="bangNhanVien">
+    <thead>
+        <tr>
+            <th>Mã nhân viên</th>
+            <th>Họ tên</th>
+            <th>Ngày sinh</th>
+            <th>Địa chỉ</th>
+            <th>SĐT</th>
+            <th>Chức vụ</th>
+            <th id="nam" style="text-align:center">Số năm công tác</th>
+            <th>Lựa chọn</th>
+        </tr>
+    </thead>
+    <tbody id="tableNhanVien">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNhanVien</td>
+                <td>@item.HoVaTen</td>
+                <td>@Html.DisplayFor(x => item.NgaySinh) </td>
+                <td>@item.DiaChi</td>
+                <td>@item.SoDienThoai</td>
+                <td>@item.ChucVu</td>
+                <td>@item.SoNamCongTac</td>
+                <td>
+                    <button class="btn btn-secondary btn-sm btnEdit" data-id="@item.MaNhanVien" style="width:100px !important;" onclick="edit(this)">Sửa</button>
+                    <button class="btn btn-outline-danger btn-sm btnDelete" data-toggle="modal" data-id="@item.MaNhanVien" data-target="#Xoanv" style="width:100px !important;">Xóa</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/Scripts/js/index.js"></script>
+

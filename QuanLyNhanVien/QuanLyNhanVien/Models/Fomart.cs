@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace QuanLyNhanVien.Models
 {
@@ -37,5 +34,18 @@ namespace QuanLyNhanVien.Models
             return afterFm;
         }
 
+    }
+
+    public class ReponseModel
+    {
+        public ReponseModel(object data, string message = null, int status = 1)
+        {
+            Data = data;
+            Message = message;
+            Status = status;
+        }
+        public object Data { get; set; }
+        public int Status { get; set; }
+        public string Message { get; set; }
     }
 }
