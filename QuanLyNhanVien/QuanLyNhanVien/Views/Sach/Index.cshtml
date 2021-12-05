@@ -133,8 +133,9 @@
 
             //Khi trang mở lên thì lấy danh sách data
             $.ajax('/Sach/GetList').then(res => {
-                let tbody = '<tr>'
+                let tbody = ''
                 res.Data.forEach(item => {
+                    tbody += '<tr>'
                     tbody += `<td>${item.Id}</td>`
                     tbody += `<td>${item.TenSach}</td>`
                     tbody += `<td>${item.NhaXuatBan}</td>`
@@ -142,8 +143,9 @@
                     tbody += `<td>${item.SoTrang}</td>`
                     tbody += `<td>${item.TrangThai ? 'Đang xuất bản' : 'Dừng xuất bản'}</td>`
                     tbody += `<td><button class="btn btn-outline-secondary btnEdit" data-id="${item.Id}">Sửa</button> <button class="btn btn-outline-danger btnXoa" data-id="${item.Id}">Xóa</button></td>`
+                    tbody += '</tr>'
                 })
-                tbody += '</tr>'
+                console.log(tbody)
                 $('#sach-table tbody').append(tbody)
             }).catch(error => {
                 console.log(error)
