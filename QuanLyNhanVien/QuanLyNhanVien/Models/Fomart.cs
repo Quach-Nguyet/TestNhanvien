@@ -38,14 +38,15 @@ namespace QuanLyNhanVien.Models
 
     public class ReponseModel
     {
+
+        public object Data { get; set; }
+        public int Status { get; set; }
+        public string Message { get; set; }
         public ReponseModel(object data, string message = null, int status = 1)
         {
             Data = data;
             Message = message;
             Status = status;
         }
-        public object Data { get; set; }
-        public int Status { get; set; }
-        public string Message { get; set; }
     }
 }

@@ -76,7 +76,6 @@ E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Web.WebPa
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Newtonsoft.Json.xml
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Antlr3.Runtime.pdb
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.csproj.AssemblyReference.cache
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.csproj.CoreCompileInputs.cache
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.csproj.CopyComplete
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\obj\Debug\QuanLyNhanVien.dll

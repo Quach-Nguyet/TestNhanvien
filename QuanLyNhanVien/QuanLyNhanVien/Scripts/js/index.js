@@ -1,189 +1,101 @@
-﻿$(document).ready(function () {
-    //định dạng ngày
-    Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
-
-    //Get List
-
-    //Tìm kiếm sách
-    $(document).ready(function () {
-        $("#Sreach").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#tableNhanVien tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-
-    //// Get sửa
-    // openEditPopup= function(maNhanVien) {
-    //    $.ajax({
-    //        method: 'GET',
-    //        url: '/Nv/Edit',
-    //        data: { id: maNhanVien }
-    //    })
-    //        .done(function (response) {
-    //            if (response.success) {
-    //                $('#Sua_MaNhanVien').val(maNhanVien);
-    //                $('#Sua_HoVaTen').val(response.data.HoVaTen);
-    //                $('#Sua_NgaySinh').val(response.data.NgaySinh);
-    //                $('#Sua_DiaChi').val(response.data.DiaChi);
-    //                $('#Sua_SoDienThoai').val(response.data.SoDienThoai);
-    //                $('#Sua_ChucVu').val(response.data.ChucVu);
-    //                $('#Sua_SoNamCongTac').val(response.data.SoNamCongTac);
-    //                $('#SuaNhanVien').modal('show');
-    //            } else {
-    //                alert(response.msg);
-    //            }
-
-    //        });
-    //}
-
-    ////Get thêm
-    //themNhanVien = function () {
-    //    $.ajax({
-    //        method: 'GET',
-    //        url: '/Nv/Create'
-    //    })
-    //        .done(function (response) {
-    //            if (response.success) {
-    //                $('#MaNhanVien').val();
-    //                $('#HoVaTen').val();
-    //                $('#NgaySinh').val();
-    //                $('#DiaChi').val();
-    //                $('#SoDienThoai').val();
-    //                $('#ChucVu').val();
-    //                $('#SoNamCongTac').val();
-    //                $('#ThemNhanVien').modal('show');
-    //            } else {
-    //                alert(response.msg);
-    //            }
-
-    //        });
-    //}
-
-    //// hành động khi click nút thêm
-    //$(document).on("click", ".btnCreate", function () {
-    //    themNhanVien();
-    //})
-
-    ////hành động khi click nút lưu
-    //$('#Them').click(function (e) {
-    //    e.preventDefault();
-    //    const nv = {
-    //        MaNhanVien: $('#MaNhanVien').val(),
-    //        HoVaTen: $('#HoVaTen').val(),
-    //        NgaySinh: $('#NgaySinh').val(),
-    //        SoDienThoai: $('#SoDienThoai').val(),
-    //        DiaChi: $('#DiaChi').val(),
-    //        ChucVu: $('#ChucVu').val(),
-    //        SoNamCongTac: $('#SoNamCongTac').val()
-    //    }
-    //    $.ajax({
-    //        method: 'POST',
-    //        url: '/nv/create',
-    //        data: nv
-    //    })
-    //        .done(function (response) {
-    //            if (response.success) {
-    //                $('#ThemNhanVien').modal('hide');
-    //                alert('Lưu thành công!');
-
-    //                //them row moi vao bang
-    //                $('#bangnhanvien').append('<tr><td>' + nv.MaNhanVien + '</td><button onclick="edit(this)"></button></tr>');
-
-    //            } else {
-    //                alert(response.msg);
-    //            }
-                   
-    //        });
-    //});
-
-    ////Hành động khi click nút sửa và lưu
-    //$('#Sua').click(function (ex) {
-    //    ex.preventDefault();
-    //    let nvNew = {
-    //        MaNhanVien: $('#Sua_MaNhanVien').val(),
-    //        HoVaTen: $('#Sua_HoVaTen').val(),
-    //        NgaySinh: $('#Sua_NgaySinh').val(),
-    //        SoDienThoai: $('#Sua_SoDienThoai').val(),
-    //        DiaChi: $('#Sua_DiaChi').val(),
-    //        ChucVu: $('#Sua_ChucVu').val(),
-    //        SoNamCongTac: $('#Sua_SoNamCongTac').val()
-    //    }
-
-    //    $.ajax({
-    //        method: "POST",
-    //        url: "/Nv/Edit",
-    //        data: nvNew
-    //    })
-    //        .done(function (response) {
-    //            $('#SuaNhanVien').modal('hide');
-    //            alert('Lưu thành công!!!');
-    //        });
-    //});
-
-    ////Get DELETE
-    //xoaNhanVien = function (ma) {
-    //    $.ajax({
-    //        method: 'GET',
-    //        url: '/Nv/delete',
-    //        data: { ma: ma }
-    //    })
-    //        .done(function (response) {
-    //            $('#Xoanv-@item.MaNhanVien').modal('show');
-    //        })
-    //}
-
-    //$(document).on("click", ".btnDelete", function () {
-    //    xoaNhanVien();
-    //})
-
-    //$("#XoaNhanVien").click(function () {
-    
-});
-
-//function edit(btn) {
-//    let id = $(btn).attr("data-id");
-//    openEditPopup(id);
-//}
-
-//function loadTable() {
-//    $('#ds_nhanvien').load("/Nv/DanhSachNv")
-//}
+﻿
+   
+function loadTable() {
+    $('#ds_nhanvien').load("/Nv/_DanhSachNV");
+}
 
 
 $(document).ready(() => {
+    //định dạng ngày
+    Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
 
-    $.get('/nv/DanhSachNv').done(response => {
-        let tbody = '<tr>'
-        response.forEach(item => {
-            tbody += '<tr>'
-            tbody += `<td>${item.MaNhanVien}</td>`
-            tbody += `<td>${item.HoVaTen}</td>`
-            tbody += `<td>${moment(item.NgaySinh).format("DD/MM/YYYY")}</td>`
-            tbody += `<td>${item.DiaChi}</td>`
-            tbody += `<td>${item.SoDienThoai}</td>`
-            tbody += `<td>${item.ChucVu}</td>`
-            tbody += `<td>${item.SoNamCongTac}</td>`
-            tbody += `<td><button class="btn btn-outline-secondary btnEdit" data-id="${item.MaNhanVien}" >Sửa</button> 
-                      <button class="btn btn-outline-danger btnXoa" data-id="${item.MaNhanVien}">Xóa</button></td>`
-            tbody += '</tr>'
+       //Tìm kiếm 
+    $("#Sreach").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#tableNhanVien tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    //$('#bangNhanVien').DataTable({
+    //    "autoWidth": true,
+    //    "processing": true, 
+    //    "serverSide": true,   
+    //    "filter": false,
+    //    "orderMulti": false, 
+    //    "ajax": {
+    //        "url": "/Nv/LoadData",
+    //        "type": "GET",
+    //        "datatype": "json"
+    //    },
+    //    "columnDefs": [{
+    //        "targets": [0],
+    //        "visible": true,
+    //        "searchable": false
+    //    }],
+    //    'columns': [
+    //        { 'data': 'MaNhanVien', 'name': 'Mã nhân viên', 'autoWith': true },
+    //        { 'data': 'HoVaTen', 'name': 'Tên nhân viên', 'autoWith': true },
+    //        { 'data': 'NgaySinh', 'name': 'Ngày sinh', 'autoWith': true },
+    //        { 'data': 'DiaChi', 'name': 'Địa chỉ', 'autoWith': true },
+    //        { 'data': 'SoDienThoai', 'name': 'Số điện thoại', 'autoWith': true },
+    //        { 'data': 'ChucVu', 'name': 'Chức vụ', 'autoWith': true },
+    //        { 'data': 'SoNamCongTac', 'name': 'Số năm công tác', 'autoWith': true },
+    //        {
+    //                "render": function (data, type, full, meta) { return `<button class="btn btn-outline-secondary btnEdit" data-id="${item.MaNhanVien}" >Sửa</button>`; }
+    //        },
+    //        {
+    //            data: null,
+    //            render: function (data, type, row) {
+    //                return ` <button class="btn btn-outline-danger btnDelete" data-id="${item.MaNhanVien}"onclick="$('#XoaNhanVien').modal('show')">Xóa</button>`; }
+    //        },
+    //    ]
+    //});
+
+        $.get('/nv/DanhSachNv').done(response => {
+            let tbody = '<tr>'
+            response.forEach(item => {
+                tbody += `<tr id=${item.MaNhanVien} >`
+                tbody += `<td>${item.MaNhanVien}</td>`
+                tbody += `<td>${item.HoVaTen}</td>`
+                tbody += `<td>${moment(item.NgaySinh).format("DD/MM/YYYY")}</td>`
+                tbody += `<td>${item.DiaChi}</td>`
+                tbody += `<td>${item.SoDienThoai}</td>`
+                tbody += `<td>${item.ChucVu}</td>`
+                tbody += `<td>${item.SoNamCongTac}</td>`
+                tbody += `<td><button class="btn btn-outline-secondary btnEdit" data-id="${item.MaNhanVien}" >Sửa</button> 
+                      <button class="btn btn-outline-danger btnDelete" data-id="${item.MaNhanVien}"onclick="$('#XoaNhanVien').modal('show')">Xóa</button></td>`
+                tbody += '</tr>'
+            })
+            $('#bangNhanVien tbody').append(tbody);
+        }).catch(error => {
+            console.log(error);
         })
-        $('#bangNhanVien tbody').append(tbody)
-               }).catch(error => {
-        console.log(error)
+    
+
+    $('#XoaNhanVien').on('click', '#Xoa', function () {
+        const ma = $('.btnDelete').attr('data-id')
+        $.ajax('/Nv/Delete?ma=' + ma).then(response => {
+            if (response.status == true)
+                location.reload();
+        //    {
+        //        $('#XoaNhanVien').modal('hide');
+        //        $(`#tableNhanVien tr #${ma}`).remove();
+        //        //loadTable();
+        //    }
+        }).catch(error => console.log(error))
     })
 
+   
     ////
 $('#tableNhanVien').on('click', '.btnEdit', function () {
 
     const id = $(this).attr('data-id')
     $.ajax('/Nv/Edit?id=' + id).then(respon => {
         const nv = respon.data
-        console.log(respon)
         $('#form-sua').find('#Sua_MaNhanVien').val(respon.data.MaNhanVien);
         $('#form-sua').find('#Sua_HoVaTen').val(respon.data.HoVaTen);
-        $('#form-sua').find('#Sua_NgaySinh').val(respon.data.NgaySinh);
+        $('#form-sua').find('#Sua_NgaySinh').val(moment(respon.data.NgaySinh).format("DD/MM/YYYY"));
         $('#form-sua').find('#Sua_DiaChi').val(respon.data.DiaChi);
         $('#form-sua').find('#Sua_SoDienThoai').val(respon.data.SoDienThoai);
         $('#form-sua').find('#Sua_ChucVu').val(respon.data.ChucVu);
@@ -271,16 +183,16 @@ $('#tableNhanVien').on('click', '.btnEdit', function () {
     })
 })
 
-$('#ThemNhanVien').on('click', '.btnCreate', function (e) {
+$('#form-them').on('click', '#Them', function (e) {
     e.preventDefault()
-        const data = {
-            MaNhanVien: $('#form-them').find('#MaNhanVien').val(),
-            MaNhanVien: $('#form-them').find('#HoVaTen').val(),
-            MaNhanVien: $('#form-them').find('#NgaySinh').val(),
-            MaNhanVien: $('#form-them').find('#SoDienThoai').val(),
-            MaNhanVien: $('#form-them').find('#DiaChi').val(),
-            MaNhanVien: $('#form-them').find('#ChucVu').val(),
-            MaNhanVien: $('#form-them').find('#SoNamCongTac').val(),
+        const data =  {
+            MaNhanVien: $('#ThemNhanVien').find('#MaNhanVien').val(),
+            HoVaTen: $('#ThemNhanVien').find('#HoVaTen').val(),
+            NgaySinh: $('#ThemNhanVien').find('#NgaySinh').val(),
+            SoDienThoai: $('#ThemNhanVien').find('#SoDienThoai').val(),
+            DiaChi: $('#ThemNhanVien').find('#DiaChi').val(),
+            ChucVu: $('#ThemNhanVien').find('#ChucVu').val(),
+            SoNamCongTac: $('#ThemNhanVien').find('#SoNamCongTac').val(),
 
         }
 
@@ -304,7 +216,6 @@ $('#ThemNhanVien').on('click', '.btnCreate', function (e) {
         })
         isValidate = false
     }
-
     if (data.SoDienThoai == null || data.SoDienThoai == "") {
         $.toast({
             heading: 'Error',
@@ -324,13 +235,22 @@ $('#ThemNhanVien').on('click', '.btnCreate', function (e) {
         })
         isValidate = false
     }
+    if (!isValidate) return
 
     $.ajax({
         url: '/Nv/Create',
         method: 'POST',
         data: data,
         success: respon => {
-            if (respon.status == true) location.reload()
+            if (respon.status == true) {
+                $('#ThemNhanVien').modal('hide');
+                alert('Lưu thành công!');
+                location.reload()
+                //$('#bangNhanVien').append(`<tr><td>${data.MaNhanVien}</td><td>${data.HoVaTen}</td><td>${data.NgaySinh}</td><td>${data.SoDienThoai}</td><td>${data.DiaChi}</td><td>${data.ChucVu}</td><td>${data.SoNamCongTac}</td> 
+                //      <td><button class="btn btn-outline-secondary btnEdit" data-id="${data.MaNhanVien}" >Sửa</button>
+                //          <button class="btn btn-outline-danger btnDelete" data-id="${data.MaNhanVien}"onclick="$('#XoaNhanVien').modal('show')">Xóa</button>
+                //      </td> </tr >`);
+            }
             else {
                 $.toast({
                     heading: 'Thông báo',
@@ -340,15 +260,13 @@ $('#ThemNhanVien').on('click', '.btnCreate', function (e) {
                 })
             }
         },
-        error:respon=> $.toast({
+        error: respon => $.toast({
             heading: 'Thông báo',
             text: respon.message,
             showHideTransition: 'fade',
             icon: 'error'
         })
-
     })
 })
-//console.log($('#form-them'))
 });
 
