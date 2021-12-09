@@ -22,17 +22,10 @@ namespace QuanLyNhanVien.Controllers
         public ActionResult Index()
         {
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-            return View("Index", dsNhanVien);
-        }
-
-        [HttpGet]
-        public ActionResult DanhSachNv()
-        {
-            var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
             if (dsNhanVien == null)
             {
                 dsNhanVien = new List<NhanVien>();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     var RanDom = new NhanVien();
                     RanDom.MaNhanVien = MaNV(i, RanDom.MaNhanVien);
@@ -46,54 +39,9 @@ namespace QuanLyNhanVien.Controllers
                 }
             }
             SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
-            dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-            return Json(dsNhanVien, JsonRequestBehavior.AllowGet);
+
+            return View("Index", dsNhanVien);
         }
-
-        [HttpPost]
-        //public ActionResult LoadData(NhanVien nv)
-        //{
-        //    try
-        //    {
-        //        var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-        //        var start = Request.Form["start"].FirstOrDefault();
-        //        var length = Request.Form["length"].FirstOrDefault();
-        //        var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        //        var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-        //        var searchValue = Request.Form["search[value]"].FirstOrDefault();
-
-        //        int pageSize = length != null ? Convert.ToInt32(length) : 0;
-        //        int skip = start != null ? Convert.ToInt32(start) : 0;
-        //        int recordsTotal = 0;
-
-        //        var customerData = (from tempcustomer in nv.MaNhanVien select tempcustomer);
-
-        //        //Sorting  
-        //        if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-        //        {
-        //            customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
-        //        }
-        //        //Search  
-        //        if (!string.IsNullOrEmpty(searchValue))
-        //        {
-        //            customerData = customerData.Where(m => m.Name == searchValue);
-        //        }
-
-        //        //total number of rows count   
-        //        recordsTotal = customerData.Count();
-        //        //Paging   
-        //        var data = customerData.Skip(skip).Take(pageSize).ToList();
-        //        //Returning Json Data  
-        //        return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-
-        //}
-
 
 
         [HttpGet]
@@ -137,11 +85,7 @@ namespace QuanLyNhanVien.Controllers
             nv.MaNhanVien = MaNV(dsNhanVien.Count, nv.MaNhanVien);
             nv.HoVaTen = Fomart.Fomartstring(nv.HoVaTen);
             bool TestPhone = Int32.TryParse(nv.SoDienThoai, out int Phone);
-            if (TestPhone && nv.SoDienThoai.Length == 10)
-            {
-                nv.SoDienThoai = nv.SoDienThoai;
-            }
-            else
+            if (TestPhone && nv.SoDienThoai.Length != 10)
             {
                 ketQua = new
                 {
@@ -162,7 +106,6 @@ namespace QuanLyNhanVien.Controllers
                     status = false
                 });
             }
-            nv.SoNamCongTac = nv.SoNamCongTac;
             foreach (var item in dsNhanVien)
             {
                 if (nv.HoVaTen == item.HoVaTen)
@@ -304,7 +247,7 @@ namespace QuanLyNhanVien.Controllers
         public ActionResult Table()
         {
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-            return PartialView("~/View/Nv/_DanhSachNV", dsNhanVien);
+            return PartialView("_DanhSachNV", dsNhanVien);
         }
     }
 }

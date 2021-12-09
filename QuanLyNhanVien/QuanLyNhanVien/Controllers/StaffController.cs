@@ -13,7 +13,6 @@ namespace QuanLyNhanVien.Controllers
     public class StaffController : Controller
     {
         private readonly string DANH_SACH_NHAN_VIEN = "DanhSachNhanVien";
-        private readonly string NHAN_VIEN = "NhanVien";
 
         public static string MaNV(int i, string manv)
         {
