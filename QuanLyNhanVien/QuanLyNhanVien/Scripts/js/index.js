@@ -12,42 +12,32 @@
     });
 
     
-    //Xoa nhan vien
-    $('#tableNhanVien').on('click', '.btnDelete', function () {
-        $('#XoaNhanVien').modal('show')
-        $('#XoaNhanVien #Xoa').attr('data-id', $(this).attr('data-id'))
-    })
-
-    $('#XoaNhanVien').on('click', '#Xoa', function () {
-        const ma = $(this).attr('data-id')
-        $.ajax('/Nv/Delete?ma=' + ma).then(respon => {
-             location.reload();
-            //loadTable();
-        })
-    })
+    
 
     // lưu form sửa
     $('#Sua').on('click', function (e) {
         e.preventDefault();
         let ngaysinh = $('#form-sua').find('#Sua_NgaySinh').val();
-
+        console.log(ngaysinh)
         const nv = {
             MaNhanVien: $('#form-sua').find('#Sua_MaNhanVien').val(),
             HoVaTen: $('#form-sua').find('#Sua_HoVaTen').val(),
-            NgaySinh: moment(ngaysinh).format('DD/MM/YYYY'),
+            NgaySinh: moment(ngaysinh, 'DD/MM/YYYY').format("YYYY-MM-DD"),
             DiaChi: $('#form-sua').find('#Sua_DiaChi').val(),
             SoDienThoai: $('#form-sua').find('#Sua_SoDienThoai').val(),
             ChucVu: $('#form-sua').find('#Sua_ChucVu').val(),
             SoNamCongTac: $('#form-sua').find('#Sua_SoNamCongTac').val(),
         };
-        console.log(nv);
+
+
         let isValidate = true;
         if (nv.HoVaTen == null || nv.HoVaTen == "") {
             $.toast({
                 heading: 'Error',
                 text: 'Họ và tên đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -57,7 +47,8 @@
                 heading: 'Error',
                 text: 'Ngày sinh đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -67,7 +58,8 @@
                 heading: 'Error',
                 text: 'Số điện thoại đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -77,7 +69,8 @@
                 heading: 'Error',
                 text: 'Chức vụ đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -97,16 +90,20 @@
                             heading: 'Thông báo',
                             text: respon.message,
                             showHideTransition: 'fade',
-                            icon: 'error'
+                            icon: 'error',
+                            position: 'top-center'
                         })
                         isValidate = false
                     }
                 },
-                error: respon => $.toast({
+                error:
+                    //respon => alert(respon.message)
+                    respon => $.toast({
                     heading: 'Thông báo',
                     text: respon.message,
                     showHideTransition: 'fade',
-                    icon: 'error'
+                    icon: 'error',
+                    position: 'top-center'
                 })
             })
         }
@@ -115,10 +112,11 @@
     //Lưu form thêm
     $('#form-them').on('click', '#Them', function (e) {
         e.preventDefault()
+        let ngaysinh = $('#ThemNhanVien').find('#NgaySinh').val()
         const data = {
             MaNhanVien: $('#ThemNhanVien').find('#MaNhanVien').val(),
             HoVaTen: $('#ThemNhanVien').find('#HoVaTen').val(),
-            NgaySinh: $('#ThemNhanVien').find('#NgaySinh').val(),
+            NgaySinh: moment(ngaysinh,'DD/MM/YYYY').format("YYYY-MM-DD"),
             SoDienThoai: $('#ThemNhanVien').find('#SoDienThoai').val(),
             DiaChi: $('#ThemNhanVien').find('#DiaChi').val(),
             ChucVu: $('#ThemNhanVien').find('#ChucVu').val(),
@@ -132,7 +130,8 @@
                 heading: 'Error',
                 text: 'Họ và tên đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -142,7 +141,8 @@
                 heading: 'Error',
                 text: 'Ngày sinh đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -151,7 +151,8 @@
                 heading: 'Error',
                 text: 'Số điện thoại đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -161,7 +162,8 @@
                 heading: 'Error',
                 text: 'Chức vụ đang trống',
                 showHideTransition: 'fade',
-                icon: 'error'
+                icon: 'error',
+                position: 'top-center'
             })
             isValidate = false
         }
@@ -183,7 +185,8 @@
                         heading: 'Thông báo',
                         text: respon.message,
                         showHideTransition: 'fade',
-                        icon: 'error'
+                        icon: 'error',
+                        position: 'top-center'
                     })
                 }
             },
@@ -191,7 +194,8 @@
                     heading: 'Thông báo',
                     text: respon.message,
                     showHideTransition: 'fade',
-                    icon: 'error'
+                    icon: 'error',
+                    position: 'top-center'
                 })
             
         })
@@ -213,7 +217,7 @@ function editNV(id) {
         const nv = respon.data
         $('#form-sua').find('#Sua_MaNhanVien').val(nv.MaNhanVien);
         $('#form-sua').find('#Sua_HoVaTen').val(nv.HoVaTen);
-        $('#form-sua').find('#Sua_NgaySinh').val(moment(nv.NgaySinh).format("DD/MM/YYYY"));
+        $('#form-sua').find('#Sua_NgaySinh').val(moment(nv.NgaySinh).format('DD-MM-YYYY'));
         $('#form-sua').find('#Sua_DiaChi').val(nv.DiaChi);
         $('#form-sua').find('#Sua_SoDienThoai').val(nv.SoDienThoai);
         $('#form-sua').find('#Sua_ChucVu').val(nv.ChucVu);

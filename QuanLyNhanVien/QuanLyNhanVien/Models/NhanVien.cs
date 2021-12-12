@@ -13,6 +13,7 @@ namespace QuanLyNhanVien.Models
 
         [Required(ErrorMessage = "Ngày sinh không được để trống")]
         [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/M/yyyy}")]
         public DateTime NgaySinh { get; set; }
 
         [Required(ErrorMessage = "Số điện thoại không được để trống")]

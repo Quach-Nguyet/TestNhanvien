@@ -96,16 +96,6 @@ namespace QuanLyNhanVien.Controllers
             if (ketQua != null) return Json(ketQua);
             nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
             nv.ChucVu = Fomart.Fomartstring(nv.ChucVu);
-            bool test = Int32.TryParse(nv.SoNamCongTac, out int nam);
-            if (!test)
-            {
-                return Json(new
-                {
-                    success = false,
-                    message = "Yêu cầu nhập kí tự số",
-                    status = false
-                });
-            }
             foreach (var item in dsNhanVien)
             {
                 if (nv.HoVaTen == item.HoVaTen)
@@ -160,7 +150,6 @@ namespace QuanLyNhanVien.Controllers
         {
             var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == nvNew.MaNhanVien);
-
             //var nv1 = dsNhanVien.FirstOrDefault(t => t.MaNhanVien != nvNew.MaNhanVien && t.HoVaTen.ToLower() == nvNew.HoVaTen.ToLower());
             object ketQua = null;
             foreach (var item in dsNhanVien)
@@ -188,15 +177,8 @@ namespace QuanLyNhanVien.Controllers
                 }
             }
             if (ketQua != null) return Json(ketQua);
-            nv.MaNhanVien = nvNew.MaNhanVien;
-            nv.HoVaTen = Fomart.Fomartstring(nvNew.HoVaTen);
-            nv.NgaySinh = nvNew.NgaySinh;
             bool TestPhone = Int32.TryParse(nvNew.SoDienThoai, out int Phone);
-            if (TestPhone && nvNew.SoDienThoai.Length == 10)
-            {
-                nv.SoDienThoai = nvNew.SoDienThoai;
-            }
-            else
+            if (!TestPhone && nvNew.SoDienThoai.Length != 10)
             {
                 ketQua = new
                 {
@@ -206,20 +188,13 @@ namespace QuanLyNhanVien.Controllers
                 };
             }
             if (ketQua != null) return Json(ketQua);
+            nv.MaNhanVien = nvNew.MaNhanVien;
+            nv.HoVaTen = Fomart.Fomartstring(nvNew.HoVaTen);
+            nv.NgaySinh = nvNew.NgaySinh; 
+            nv.SoDienThoai = nvNew.SoDienThoai;
             nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
             nv.ChucVu = Fomart.Fomartstring(nvNew.ChucVu);
-            bool test = Int32.TryParse(nvNew.SoNamCongTac, out int nam);
-            if (!test)
-            {
-                ketQua = new
-                {
-                    success = false,
-                    status = false,
-                    message = "* Yêu cầu nhập kí tự số"
-                };
-            }
-            else
-                nv.SoNamCongTac = nvNew.SoNamCongTac;
+            nv.SoNamCongTac = nvNew.SoNamCongTac;
             return Json(new { success = true, status = true, data = dsNhanVien });
         }
 

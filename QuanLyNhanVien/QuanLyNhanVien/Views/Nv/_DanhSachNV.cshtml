@@ -7,11 +7,11 @@
             <th>Mã nhân viên</th>
             <th>Họ tên</th>
             <th>Ngày sinh</th>
-            <th>Địa chỉ</th>
+            <th>Địa chỉ</th>         
             <th>SĐT</th>
             <th>Chức vụ</th>
             <th id="nam" style="text-align:center">Số năm công tác</th>
-            <th>Lựa chọn</th>
+            <th>Lựa chọn</th>   
         </tr>
     </thead>
     <tbody id="tableNhanVien">
@@ -25,7 +25,9 @@
                 <td>@item.ChucVu</td>
                 <td>@item.SoNamCongTac</td>
                 <td>
-                    <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')">Sửa</button>
+                    <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')" >
+                        Sửa
+                    </button>
                     <button class="btn btn-outline-danger" onclick="deleteNV('@item.MaNhanVien', this)">Xóa</button>
                 </td>
             </tr>

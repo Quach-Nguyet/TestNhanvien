@@ -43,7 +43,7 @@
                     <form class="card-body" method="post" id="form-them-moi">
                         <div class="mb-3">
                             <label for="TenSach" class="form-label">Tên sách</label>
-                            <input type="text" class="form-control TenSach" name="TenSach">
+                            <input type="text" class="form-control TenSach" name="TenSach" required regex>
                             <small class="TenSach_message"></small>
                         </div>
                         <div class="mb-3">
@@ -65,7 +65,7 @@
                             <input type="checkbox" class="form-check-input TrangThai" name="TrangThai">
                         </div>
                         <div>
-                            <button class="btn btn-outline-success btn-save">Lưu</button>
+                            <button class="btn btn-outline-success btn-save" type="submit">Lưu</button>
                             <button class="btn btn-outline-secondary" onclick="$('#formThemMoi').modal('hide')">Hủy</button>
                         </div>
                     </form>
@@ -130,6 +130,29 @@
         $(document).ready(() => {
             //set datapicker
             $(".datepicker").datepicker();
+
+            //khởi tạo cái form để n bắt các validate
+            //Định nghĩa thêm method "regex" để validate ngày tháng năm dạng dd/mm/yyyy
+            $.validator.addMethod(
+                "regex",
+                function (value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Ngày tháng năm không đúng định dạng"
+            );
+            //
+
+            $('#form-them-moi').validate()
+            $("#form-them-moi .TenSach").rules("add", {
+                required: true,
+                regex: "^([1-2][0-9]|3[0-1]|0?[1-9])[-]([1][0-2]|0?[1-9])[-]([4][0-2]|0?[1-9])",
+                messages: {
+                    required: "Tên sách là bắt buộc nhập",
+                    regex: "Ngày tháng năm sinh k đúng"
+                }
+            });
+            //
 
             //Khi trang mở lên thì lấy danh sách data
             $.ajax('/Sach/GetList').then(res => {
@@ -240,74 +263,86 @@
                 })
             })
 
+            $('#form-them-moi').on('submit', function (e) {
+                var isvalid = $("#form-them-moi").valid();
+                console.log(isvalid)
+                $.toast({
+                    heading: 'Thông báo',
+                    text: 'Bạn chưa nhập số trang',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    position: 'top-center'
+                })
+                e.preventDefault()
+            })
      
             //Hành động khi click button lưu trong form thêm
-            $('#form-them-moi').on('click', '.btn-save', function (event) {
-                event.preventDefault()
-                const data = {
-                    TenSach: $('#form-them-moi').find('.TenSach').val(),
-                    NhaXuatBan: $('#form-them-moi').find('.NhaXuatBan').val(),
-                    NgayXuatBan: $('#form-them-moi').find('.NgayXuatBan').val(),
-                    SoTrang: $('#form-them-moi').find('.SoTrang').val(),
-                    TrangThai: $('#form-them-moi').find('.TrangThai').is(':checked')
-                }
-                // validate data
-                let isValid = true
-                if (data.TenSach == null || data.TenSach == '') {
-                    $.toast({
-                        heading: 'Thông báo',
-                        text: 'Bạn chưa nhập tên sách',
-                        showHideTransition: 'fade',
-                        icon: 'error'
-                    })
-                    isValid = false
-                }
-                if (data.NgayXuatBan == null || data.NgayXuatBan == '') {
-                    $.toast({
-                        heading: 'Thông báo',
-                        text: 'Bạn chưa nhập ngày xuất bản',
-                        showHideTransition: 'fade',
-                        icon: 'error'
-                    })
-                    isValid = false
-                }
-                if (data.SoTrang == null || data.SoTrang == '') {
-                    $.toast({
-                        heading: 'Thông báo',
-                        text: 'Bạn chưa nhập số trang',
-                        showHideTransition: 'fade',
-                        icon: 'error'
-                    })
-                    isValid = false
-                }
-                if (!isValid) return
-                //
+            //$('#form-them-moi').on('click', '.btn-save', function (event) {
+            //    event.preventDefault()
+            //    const data = {
+            //        TenSach: $('#form-them-moi').find('.TenSach').val(),
+            //        NhaXuatBan: $('#form-them-moi').find('.NhaXuatBan').val(),
+            //        NgayXuatBan: $('#form-them-moi').find('.NgayXuatBan').val(),
+            //        SoTrang: $('#form-them-moi').find('.SoTrang').val(),
+            //        TrangThai: $('#form-them-moi').find('.TrangThai').is(':checked')
+            //    }
+            //    // validate data
+            //    let isValid = true
+            //    if (data.TenSach == null || data.TenSach == '') {
+            //        $.toast({
+            //            heading: 'Thông báo',
+            //            text: 'Bạn chưa nhập tên sách',
+            //            showHideTransition: 'fade',
+            //            icon: 'error'
+            //        })
+            //        isValid = false
+            //    }
+            //    if (data.NgayXuatBan == null || data.NgayXuatBan == '') {
+            //        $.toast({
+            //            heading: 'Thông báo',
+            //            text: 'Bạn chưa nhập ngày xuất bản',
+            //            showHideTransition: 'fade',
+            //            icon: 'error'
+            //        })
+            //        isValid = false
+            //    }
+            //    if (data.SoTrang == null || data.SoTrang == '') {
+            //        $.toast({
+            //            heading: 'Thông báo',
+            //            text: 'Bạn chưa nhập số trang',
+            //            showHideTransition: 'fade',
+            //            icon: 'error'
+            //        })
+            //        isValid = false
+            //    }
+            //    if (!isValid) return
+            //    //
 
-                // gọi server để thêm mới
-                $.ajax({
-                    url: '/Sach/Create',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    success: res => {
-                        if (res.Status == 1) location.reload()
-                        else {
-                            $.toast({
-                                heading: 'Thông báo',
-                                text: res.Message,
-                                showHideTransition: 'fade',
-                                icon: 'error'
-                            })
-                        }
-                    },
-                    error: res => $.toast({
-                        heading: 'Thông báo',
-                        text: res,
-                        showHideTransition: 'fade',
-                        icon: 'error'
-                    })
-                })
-            })
+            //    // gọi server để thêm mới
+            //    $.ajax({
+            //        url: '/Sach/Create',
+            //        method: 'POST',
+            //        contentType: 'application/json',
+            //        data: JSON.stringify(data),
+            //        success: res => {
+            //            if (res.Status == 1) location.reload()
+            //            else {
+            //                $.toast({
+            //                    heading: 'Thông báo',
+            //                    text: res.Message,
+            //                    showHideTransition: 'fade',
+            //                    icon: 'error'
+            //                })
+            //            }
+            //        },
+            //        error: res => $.toast({
+            //            heading: 'Thông báo',
+            //            text: res,
+            //            showHideTransition: 'fade',
+            //            icon: 'error'
+            //        })
+            //    })
+            //})
 
         })
 

@@ -187,84 +187,84 @@
         </div>
     </div>
 
-</div>
-
-@section scripts {
-    <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/dependencyLibs/inputmask.dependencyLib.js"></script>
-    <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/inputmask.js"></script>
-    <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/inputmask.date.extensions.js"></script>
-    <script src="~/Scripts/js/index.js"></script>
-
-    @*định dạng form*@
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
 
 
+    @section scripts {
+        <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/dependencyLibs/inputmask.dependencyLib.js"></script>
+        <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/inputmask.js"></script>
+        <script src="https://unpkg.com/inputmask@4.0.4/dist/inputmask/inputmask.date.extensions.js"></script>
+        <script src="~/Scripts/js/index.js"></script>
 
-    @*Get-Post Sửa*@
-    @*<script>
-            function openEditPopup(maNhanVien) {
-                var requestOptions = {
-                    method: 'GET',
-                    redirect: 'follow'
-                };
-
-                fetch("/Nv/Edit?maNhanVien=" + maNhanVien, requestOptions)
-                    .then(response => response.json())
-                    .then(jData => {
-
-                        $('#SuaNhanVien').modal('show')
-                        document.getElementsByName('MaNhanVien').value = jData.MaNhanVien,
-                            document.getElementById('Sua_HoVaTen').value = jData.HoVaTen,
-                            document.getElementById('Sua_NgaySinh').value = jData.NgaySinh,
-                            document.getElementById('Sua_DiaChi').value = jData.DiaChi,
-                            document.getElementById('Sua_SoDienThoai').value = jData.SoDienThoai,
-                            document.getElementById('Sua_ChucVu').value = jData.ChucVu,
-                            document.getElementById('Sua_SoNamCongTac').value = jData.SoNamCongTac
-                    })
-                    .catch(error => console.log('error', error));
-            }
-
-            function luuNhanVien(){
-                var requestOptions = {
-                    method: 'POST',
-                    redirect: 'follow',
-                    contentType: 'application/json',
-                    data: JSON.stringify(nv)
-                };
-                        const nv = {
-                            MaNhanVien: document.getElementsByName('MaNhanVien').value,
-                            HoVaTen: document.getElementById('Sua_HoVaTen').value,
-                            NgaySinh: document.getElementById('Sua_NgaySinh').value,
-                            SoDienThoai: document.getElementById('Sua_SoDienThoai').value,
-                            DiaChi: document.getElementById('Sua_DiaChi').value,
-                            ChucVu: document.getElementById('Sua_ChucVu').value,
-                            SoNamCongTac: document.getElementById('Sua_SoNamCongTac').value
-                        }
-
-                fetch("/Nv/Update?NvNew=" + nv, requestOptions)
-
-            }
-        </script>*@
+        @*định dạng form*@
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+        </script>
 
 
 
-} 
+        @*Get-Post Sửa*@
+        @*<script>
+                function openEditPopup(maNhanVien) {
+                    var requestOptions = {
+                        method: 'GET',
+                        redirect: 'follow'
+                    };
+
+                    fetch("/Nv/Edit?maNhanVien=" + maNhanVien, requestOptions)
+                        .then(response => response.json())
+                        .then(jData => {
+
+                            $('#SuaNhanVien').modal('show')
+                            document.getElementsByName('MaNhanVien').value = jData.MaNhanVien,
+                                document.getElementById('Sua_HoVaTen').value = jData.HoVaTen,
+                                document.getElementById('Sua_NgaySinh').value = jData.NgaySinh,
+                                document.getElementById('Sua_DiaChi').value = jData.DiaChi,
+                                document.getElementById('Sua_SoDienThoai').value = jData.SoDienThoai,
+                                document.getElementById('Sua_ChucVu').value = jData.ChucVu,
+                                document.getElementById('Sua_SoNamCongTac').value = jData.SoNamCongTac
+                        })
+                        .catch(error => console.log('error', error));
+                }
+
+                function luuNhanVien(){
+                    var requestOptions = {
+                        method: 'POST',
+                        redirect: 'follow',
+                        contentType: 'application/json',
+                        data: JSON.stringify(nv)
+                    };
+                            const nv = {
+                                MaNhanVien: document.getElementsByName('MaNhanVien').value,
+                                HoVaTen: document.getElementById('Sua_HoVaTen').value,
+                                NgaySinh: document.getElementById('Sua_NgaySinh').value,
+                                SoDienThoai: document.getElementById('Sua_SoDienThoai').value,
+                                DiaChi: document.getElementById('Sua_DiaChi').value,
+                                ChucVu: document.getElementById('Sua_ChucVu').value,
+                                SoNamCongTac: document.getElementById('Sua_SoNamCongTac').value
+                            }
+
+                    fetch("/Nv/Update?NvNew=" + nv, requestOptions)
+
+                }
+            </script>*@
+
+
+
+    }
