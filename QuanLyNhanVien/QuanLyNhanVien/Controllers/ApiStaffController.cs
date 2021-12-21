@@ -36,7 +36,7 @@ namespace QuanLyNhanVien.Controllers
                     RanDom.SoDienThoai = i + "XXXXXXXXXXX";
                     RanDom.DiaChi = i + "XXXXXXXXXXX";
                     RanDom.ChucVu = i + "XXXXXXXXXXX";
-                    RanDom.SoNamCongTac = "" + i;
+                    RanDom.SoNamCongTac = i;
                     dsNhanVien.Add(RanDom);
                 }
             }
@@ -44,7 +44,12 @@ namespace QuanLyNhanVien.Controllers
             return View();
         }
 
-        public ActionResult ChiTietNhanVien(string maNhanVien)
+        private Guid MaNV(int i, Guid maNhanVien)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ActionResult ChiTietNhanVien(Guid maNhanVien)
         {
             NhanVien nv = new NhanVien();
             if (dsNhanVien.Count == 0)
@@ -106,12 +111,12 @@ namespace QuanLyNhanVien.Controllers
 
                 nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
                 nv.ChucVu = Fomart.Fomartstring(nv.ChucVu);
-                bool test = Int32.TryParse(nv.SoNamCongTac, out int nam);
-                if (test != true)
-                {
-                    ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
-                    return Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
-                }
+                //bool test = Int32.TryParse(nv.SoNamCongTac, out int nam);
+                //if (test != true)
+                //{
+                //    ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
+                //    return Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
+                //}
 
                 foreach (var item in dsNhanVien)
                 {
@@ -134,14 +139,9 @@ namespace QuanLyNhanVien.Controllers
         }
 
         [HttpPut]
-        public ActionResult SuaThongTinNhanVien(string maNhanVien)
+        public ActionResult SuaThongTinNhanVien(Guid maNhanVien)
         {
-            if (maNhanVien == null)
-
-            {
-                return Content("Chưa có mã nhân viên cần tìm", "application/json", Encoding.UTF8);
-            }
-
+           
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == maNhanVien);
 
             return Content(JsonConvert.SerializeObject(nv), "application/json", Encoding.UTF8);
@@ -187,17 +187,17 @@ namespace QuanLyNhanVien.Controllers
 
             nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
             nv.ChucVu = Fomart.Fomartstring(nvNew.ChucVu);
-            bool test = Int32.TryParse(nvNew.SoNamCongTac, out int nam);
-            if (test != true)
-            {
-                ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
-                return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);
-            }
+            //bool test = Int32.TryParse(nvNew.SoNamCongTac, out int nam);
+            //if (test != true)
+            //{
+            //    ViewData["ErrorYear"] = "* Yêu cầu nhập kí tự số";
+            //    return Content(JsonConvert.SerializeObject(nvNew), "application/json", Encoding.UTF8);
+            //}
             return Content(JsonConvert.SerializeObject(dsNhanVien), "application/json", Encoding.UTF8);
         }
 
         [HttpDelete]
-        public ActionResult XoaNhanVien(string ma)
+        public ActionResult XoaNhanVien(Guid ma)
         {
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == ma);
             dsNhanVien.Remove(nv);

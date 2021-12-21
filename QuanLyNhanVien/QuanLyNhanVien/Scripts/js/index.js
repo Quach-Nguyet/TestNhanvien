@@ -1,24 +1,21 @@
-﻿$(document).ready(() => {
+﻿
 
+$(document).ready(() => {
     //định dạng ngày
     Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
 
-    //Tìm kiếm 
-    $("#Sreach").on("keyup", function () {
+
+       $("#Sreach").on("keyup", function () {
         var value = $(this).val().toLowerCase();
         $("#tableNhanVien tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
 
-    
-    
-
     // lưu form sửa
     $('#Sua').on('click', function (e) {
         e.preventDefault();
         let ngaysinh = $('#form-sua').find('#Sua_NgaySinh').val();
-        console.log(ngaysinh)
         const nv = {
             MaNhanVien: $('#form-sua').find('#Sua_MaNhanVien').val(),
             HoVaTen: $('#form-sua').find('#Sua_HoVaTen').val(),
@@ -84,6 +81,8 @@
                     if (respon.status) {
                         $('#SuaNhanVien').modal('hide');
                         $('#nhanvien_table').load('/nv/table');
+                        //table_nv.columns.adjust().draw();
+
                     }
                     else {
                         $.toast({
@@ -97,7 +96,6 @@
                     }
                 },
                 error:
-                    //respon => alert(respon.message)
                     respon => $.toast({
                     heading: 'Thông báo',
                     text: respon.message,
@@ -177,7 +175,6 @@
                 if (respon.status) {
                     $('#ThemNhanVien').modal('hide');
                     alert('Lưu thành công!');
-                    //location.reload()
                     $('#nhanvien_table').load('/nv/table');
                 }
                 else {
@@ -200,14 +197,20 @@
             
         })
     })
+
 });
+function loadTable() {
+    $('#nhanvien_table').load('/nv/table');
+}
 
 function deleteNV(id, tableRow) {
     let confirmed = confirm("Bạn có chắc chắn muốn xóa nhân viên này?");
     if (confirmed) {
         $.ajax('/Nv/Delete?ma=' + id).then(respon => {
-            //$(tableRow).closest('tr').remove();
-            $('#nhanvien_table').load('/nv/table');
+            if (respon.success) {
+                //$(tableRow).closest('tr').remove();
+                $('#nhanvien_table').load('/nv/table');
+            }
         })
     }
 }
@@ -225,5 +228,26 @@ function editNV(id) {
 
         $('#SuaNhanVien').modal('show');
     }).catch(error => console.log(error))
+}
+let pageIndex = 1
+let roomId = 0
+//function pagination(page,id) {
+//    pageIndex = page;
+//    roomId = id;
+//            $('#nhanvien_table').load('/nv/table?page=?idRoom=' +page+id);
+//}
+
+function room(id) {
+    roomId = id;
+    $('#nhanvien_table').load('/nv/table?idRoom=' + id);
+    pagination(pageIndex,id)
+}
+
+function next() {
+    pagination(pageIndex+1)
+}
+
+function previsous() {
+    pagination(pageIndex-1)
 }
 

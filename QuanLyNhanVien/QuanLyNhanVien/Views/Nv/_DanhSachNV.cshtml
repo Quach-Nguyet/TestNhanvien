@@ -1,31 +1,98 @@
-﻿
-@model List<QuanLyNhanVien.Models.NhanVien>
+﻿@model IEnumerable<QuanLyNhanVien.Models.NhanVien>
 
-<table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien"  cellspacing="0">
+@*@model List<QuanLyNhanVien.Models.NhanVien>
+
+    <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien"  cellspacing="0">
+        <thead>
+            <tr style="text-align: center ">
+                <th>Mã nhân viên</th>
+                <th>Họ tên</th>
+                <th>Ngày sinh</th>
+                <th>Địa chỉ</th>
+                <th>SĐT</th>
+                <th>Chức vụ</th>
+                <th id="nam" style="text-align:center">Số năm công tác</th>
+                <th>Lựa chọn</th>
+            </tr>
+        </thead>
+        <tbody id="tableNhanVien">
+            @foreach (var item in Model) {
+                <tr>
+                    <td>@item.MaNhanVien</td>
+                    <td>@item.HoVaTen</td>
+                    <td>@item.NgaySinh.ToString("dd/MM/yyyy")</td>
+                    <td>@item.DiaChi</td>
+                    <td>@item.SoDienThoai</td>
+                    <td>@item.ChucVu</td>
+                    <td style="text-align: center">@item.SoNamCongTac</td>
+                    <td style="text-align: center">
+                        <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')" >
+                            Sửa
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="deleteNV('@item.MaNhanVien', this)">Xóa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
+<div class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Phòng ban
+    </button>
+    <div class="dropdown-menu phongBan" aria-labelledby="dropdownMenu2">
+        <button class="dropdown-item" type="button" onclick="room(0)">Tất cả</button>
+        @*@for (int i = 1; i <= ViewBag.IdRoom; i++)
+        {
+                <button class="dropdown-item" onclick="room(@i)" type="button"> @ViewBag.NameRoom  </button>
+        }*@
+        @foreach (var item in ViewBag.NameRoom)
+        {
+                <button class="dropdown-item" onclick="room(@ViewBag.IdRoom)" type="button"> @item  </button>
+        }
+
+    </div>
+</div>
+<table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" function="data()" id="bangNhanVien" cellspacing="0">
     <thead>
-        <tr>
+        <tr style="text-align: center ">
             <th>Mã nhân viên</th>
             <th>Họ tên</th>
             <th>Ngày sinh</th>
-            <th>Địa chỉ</th>         
+            <th>Địa chỉ</th>
             <th>SĐT</th>
             <th>Chức vụ</th>
             <th id="nam" style="text-align:center">Số năm công tác</th>
-            <th>Lựa chọn</th>   
+            <th>Lựa chọn</th>
         </tr>
     </thead>
     <tbody id="tableNhanVien">
-        @foreach (var item in Model) { 
+        @foreach (var item in Model)
+        {
             <tr>
-                <td>@item.MaNhanVien</td>
-                <td>@item.HoVaTen</td>
-                <td>@item.NgaySinh.ToString("dd/MM/yyyy")</td>
-                <td>@item.DiaChi</td>
-                <td>@item.SoDienThoai</td>
-                <td>@item.ChucVu</td>
-                <td>@item.SoNamCongTac</td>
                 <td>
-                    <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')" >
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoVaTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgaySinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoDienThoai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaChi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChucVu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoNamCongTac)
+                </td>
+                <td style="text-align: center">
+                    <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')"  style="">
                         Sửa
                     </button>
                     <button class="btn btn-outline-danger" onclick="deleteNV('@item.MaNhanVien', this)">Xóa</button>
@@ -34,6 +101,26 @@
         }
     </tbody>
 </table>
-
+@*<Modal pagination*@
+<nav aria-label="Page navigation example" id="phan_trang" style="float:right">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" onclick="previsous()" aria-label="Previous" >
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Trước</span>
+            </a>
+        </li>
+        @for (int item = 1; item <= ViewBag.TotalPages; item++)
+        {
+                <li class="page-item"><a class="page-link" onclick="pagination(@item)">@item</a></li>
+        }
+        <li class="page-item">
+            <a class="page-link" onclick="next()" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Sau</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
 

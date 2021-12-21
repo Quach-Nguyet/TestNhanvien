@@ -21,7 +21,7 @@
 
     table {
         margin-top: 40px !important;
-        font-size: 18px !important;
+        font-size: 20px !important;
     }
 
     tr {
@@ -33,17 +33,16 @@
     }
 
 </style>
-<div class="container">
     <div class="header d-flex">
-        <a class="btn btn-outline-primary btnCreate" style="width: 10%" data-toggle="modal" onclick="$('#ThemNhanVien').modal('show')">Thêm mới</a>
+        <a class="btn btn-primary btnCreate" style="width: 10%" data-toggle="modal" onclick="$('#ThemNhanVien').modal('show')">Thêm mới</a>
         <div style="margin-left:2%; width: 88%">
             <input type="text" id="Sreach" name="keyword" class="form-control" placeholder="Nhập từ khóa cần tìm" />
         </div>
     </div>
     <div id="nhanvien_table" class="mt-3">
-        @{Html.RenderAction("Table", "Nv");}
+        @{Html.RenderAction("Table", "Nv",new { page = 1, page_size = 5, idRoom = 0 });}
     </div>
-    <div id="ds_nhanvien" class="mt-3">
+    <div class="mt-3">
 
         @*<modal xoa>*@
         <div class="modal fade" id="XoaNhanVien" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -187,6 +186,7 @@
         </div>
     </div>
 
+   
 
 
     @section scripts {
@@ -197,13 +197,10 @@
 
         @*định dạng form*@
         <script>
-            // Example starter JavaScript for disabling form submissions if there are invalid fields
             (function () {
                 'use strict';
                 window.addEventListener('load', function () {
-                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
                     var forms = document.getElementsByClassName('needs-validation');
-                    // Loop over them and prevent submission
                     var validation = Array.prototype.filter.call(forms, function (form) {
                         form.addEventListener('submit', function (event) {
                             if (form.checkValidity() === false) {
@@ -216,55 +213,4 @@
                 }, false);
             })();
         </script>
-
-
-
-        @*Get-Post Sửa*@
-        @*<script>
-                function openEditPopup(maNhanVien) {
-                    var requestOptions = {
-                        method: 'GET',
-                        redirect: 'follow'
-                    };
-
-                    fetch("/Nv/Edit?maNhanVien=" + maNhanVien, requestOptions)
-                        .then(response => response.json())
-                        .then(jData => {
-
-                            $('#SuaNhanVien').modal('show')
-                            document.getElementsByName('MaNhanVien').value = jData.MaNhanVien,
-                                document.getElementById('Sua_HoVaTen').value = jData.HoVaTen,
-                                document.getElementById('Sua_NgaySinh').value = jData.NgaySinh,
-                                document.getElementById('Sua_DiaChi').value = jData.DiaChi,
-                                document.getElementById('Sua_SoDienThoai').value = jData.SoDienThoai,
-                                document.getElementById('Sua_ChucVu').value = jData.ChucVu,
-                                document.getElementById('Sua_SoNamCongTac').value = jData.SoNamCongTac
-                        })
-                        .catch(error => console.log('error', error));
-                }
-
-                function luuNhanVien(){
-                    var requestOptions = {
-                        method: 'POST',
-                        redirect: 'follow',
-                        contentType: 'application/json',
-                        data: JSON.stringify(nv)
-                    };
-                            const nv = {
-                                MaNhanVien: document.getElementsByName('MaNhanVien').value,
-                                HoVaTen: document.getElementById('Sua_HoVaTen').value,
-                                NgaySinh: document.getElementById('Sua_NgaySinh').value,
-                                SoDienThoai: document.getElementById('Sua_SoDienThoai').value,
-                                DiaChi: document.getElementById('Sua_DiaChi').value,
-                                ChucVu: document.getElementById('Sua_ChucVu').value,
-                                SoNamCongTac: document.getElementById('Sua_SoNamCongTac').value
-                            }
-
-                    fetch("/Nv/Update?NvNew=" + nv, requestOptions)
-
-                }
-            </script>*@
-
-
-
     }
