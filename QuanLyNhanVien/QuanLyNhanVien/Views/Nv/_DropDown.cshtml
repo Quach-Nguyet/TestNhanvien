@@ -1,0 +1,27 @@
+﻿
+
+@model List<QuanLyNhanVien.Models.PhongBan>
+
+@*<div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Phòng ban
+        </button>
+        <div class="dropdown-menu phongBan" aria-labelledby="dropdownMenu2">
+            <button class="dropdown-item" type="button" onclick="room(0)">Tất cả</button>
+            @foreach (var item in Model)
+            {
+                <button class="dropdown-item pb-item" onclick="room(@item.Id)" type="button" data-name="@item.Ten_phong_ban">  @item.Ten_phong_ban </button>
+            }
+        </div>
+    </div>*@
+<style>
+   
+</style>
+
+<select class="dropdown" placeholder="Please choose">
+    <option class="dropdown-item" type="button" onclick="room(0)">Tất cả</option>
+    @foreach (var item in Model)
+    {
+        <option class="dropdown-item pb-item" onclick="room(@item.Id)" type="button" data-name="@item.Id">  @item.Ten_phong_ban </option>
+    }
+</select>

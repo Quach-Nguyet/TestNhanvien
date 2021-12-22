@@ -33,24 +33,63 @@ namespace QuanLyNhanVien.Controllers
 
         }
 
-       
-        public List<NhanVien> Pagination(int page = 1, int page_size = 5, string name = null,int idRoom = 0)
+        public ActionResult DropDow()
+        {
+            List<PhongBan> room;
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                room = conn.Query<PhongBan>("SELECT * FROM public.phong_ban").ToList();
+                ViewBag.room = room;
+            }
+            return PartialView("_DropDown", room);
+        }
+        //public List<NhanVien> Pagination(int page=1, int page_size = 5, string name = null)
+        //{
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        if (page < 1) return new List<NhanVien>();
+        //        ViewBag.NameRoom = conn.Query<string>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
+        //        //ViewBag.IdRoom = conn.Query<int>("SELECT COUNT(*) FROM public.phong_ban").FirstOrDefault();
+        //       int idRoom = conn.Query<int>("SELECT id FROM public.phong_ban WHERE ten_phong_ban = @name",new { name }).FirstOrDefault();
+        //        ViewBag.IdRoom = idRoom;
+        //        if (idRoom != 0)
+        //        {
+        //            List<NhanVien>  dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @idRoom ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
+        //            {
+        //                page,
+        //                page_size,
+        //                idRoom 
+        //            }).ToList();
+        //            return dsNhanVien;
+        //        }
+        //        else
+        //        {
+        //            List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size", new
+        //            {
+        //                page = page,
+        //                page_size = page_size
+        //            }).ToList();
+        //            return dsNhanVien;
+        //        }
+
+        //    }
+        //}
+        public List<NhanVien> Pagination(int page=1, int page_size = 5, int Id = 0)
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
                 if (page < 1) return new List<NhanVien>();
-                ViewBag.NameRoom = conn.Query<string>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
-                //ViewBag.IdRoom = conn.Query<int>("SELECT COUNT(*) FROM public.phong_ban").FirstOrDefault();
-                idRoom = conn.Query<int>("SELECT id FROM public.phong_ban WHERE ten_phong_ban = @name",new { name }).FirstOrDefault();
-                ViewBag.IdRoom = idRoom;
-                if (idRoom != 0)
+                ViewBag.NameRoom = conn.Query<PhongBan>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
+                if (Id != 0)
                 {
-                    List<NhanVien>  dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @idRoom ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
+                    List<NhanVien>  dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
                     {
                         page,
                         page_size,
-                        idRoom 
+                        Id 
                     }).ToList();
                     return dsNhanVien;
                 }
@@ -58,8 +97,8 @@ namespace QuanLyNhanVien.Controllers
                 {
                     List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size", new
                     {
-                        page = page,
-                        page_size = page_size
+                        page,
+                        page_size
                     }).ToList();
                     return dsNhanVien;
                 }
@@ -276,22 +315,37 @@ namespace QuanLyNhanVien.Controllers
             return Json(new { success = true, status = true, data = dsNhanVien });
         }
 
-        public ActionResult Table(int page=1, int page_size=5, int idRoom = 0)
+        //public ActionResult Table(int page=1, int page_size=5, int idRoom = 0)
+        //{
+        //    int rows;
+        //    //var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
+        //    var dsNhanVien = Pagination(page, page_size);
+        //    using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        if (idRoom != 0)
+        //        {
+        //             rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien WHERE \"PhongBan\"=@idRoom",new {idRoom}).FirstOrDefault();
+        //        }
+        //        else
+        //        {
+        //             rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien").FirstOrDefault();
+        //        }
+        //        ViewBag.TotalPages = Math.Ceiling((double)rows / page_size);
+
+        //    }
+        //    return PartialView("_DanhSachNV", dsNhanVien);
+        //}
+        public ActionResult Table(int page = 1, int page_size = 5, int Id = 0)
         {
             int rows;
             //var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-            var dsNhanVien = Pagination(page, page_size);
+            var dsNhanVien = Pagination(page, page_size,Id);
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                if (idRoom != 0)
-                {
-                     rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien WHERE \"PhongBan\"=@idRoom",new {idRoom}).FirstOrDefault();
-                }
-                else
-                {
+              
                      rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien").FirstOrDefault();
-                }
                 ViewBag.TotalPages = Math.Ceiling((double)rows / page_size);
                 
             }

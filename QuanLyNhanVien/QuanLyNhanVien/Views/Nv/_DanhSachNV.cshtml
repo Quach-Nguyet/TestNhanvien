@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<QuanLyNhanVien.Models.NhanVien>
-
 @*@model List<QuanLyNhanVien.Models.NhanVien>
 
     <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien"  cellspacing="0">
@@ -36,24 +35,7 @@
         </tbody>
     </table>*@
 
-<div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Phòng ban
-    </button>
-    <div class="dropdown-menu phongBan" aria-labelledby="dropdownMenu2">
-        <button class="dropdown-item" type="button" onclick="room(0)">Tất cả</button>
-        @*@for (int i = 1; i <= ViewBag.IdRoom; i++)
-        {
-                <button class="dropdown-item" onclick="room(@i)" type="button"> @ViewBag.NameRoom  </button>
-        }*@
-        @foreach (var item in ViewBag.NameRoom)
-        {
-                <button class="dropdown-item" onclick="room(@ViewBag.IdRoom)" type="button"> @item  </button>
-        }
-
-    </div>
-</div>
-<table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" function="data()" id="bangNhanVien" cellspacing="0">
+<table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien" cellspacing="0">
     <thead>
         <tr style="text-align: center ">
             <th>Mã nhân viên</th>

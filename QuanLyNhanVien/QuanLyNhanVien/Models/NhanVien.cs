@@ -40,31 +40,17 @@ namespace QuanLyNhanVien.Models
 
         [Column("so_nam_cong_tac")]
         public int SoNamCongTac { get; set; }
+
+        public int Id { get; set; }
     }
 
     public abstract class BaseEntity
     {
     }
-  // public class Connection
-    //  {
-    //#pragma warning disable S2223 // Non-constant static fields should not be visible
-    //        protected static SqlConnection conn;
-    //#pragma warning restore S2223 // Non-constant static fields should not be visible
-    //        private const string connStr = "Server=localhost;Port=5432;User Id=postgres;Password=123;Database=QuanLyNhanVien;";
 
-    //        public static SqlConnection getConnection()
-    //        {
-    //            if (conn == null)
-    //            {
-    //                conn = new SqlConnection(connStr);
-    //                conn.Open();
-    //            }
-    //            return conn;
-    //        }
-
-    //        public static implicit operator NpgsqlConnection(Connection v)
-    //        {
-    //            throw new NotImplementedException();
-    //        }
-    //    }
+    public class PhongBan
+    {
+        public int Id { get; set; }
+        public string Ten_phong_ban { get; set; }
+    }
 }
