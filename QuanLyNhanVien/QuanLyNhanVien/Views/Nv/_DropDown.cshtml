@@ -2,7 +2,7 @@
 
 @model List<QuanLyNhanVien.Models.PhongBan>
 
-@*<div class="dropdown">
+<div class="dropdown">
         <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Phòng ban
         </button>
@@ -13,8 +13,8 @@
                 <button class="dropdown-item pb-item" onclick="room(@item.Id)" type="button" data-name="@item.Ten_phong_ban">  @item.Ten_phong_ban </button>
             }
         </div>
-    </div>*@
-<style>
+    </div>
+@*<style>
    
 </style>
 
@@ -24,4 +24,4 @@
     {
         <option class="dropdown-item pb-item" onclick="room(@item.Id)" type="button" data-name="@item.Id">  @item.Ten_phong_ban </option>
     }
-</select>
+</select>*@
