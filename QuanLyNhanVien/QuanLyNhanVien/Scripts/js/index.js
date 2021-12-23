@@ -12,10 +12,6 @@ $(document).ready(() => {
         });
        });
 
-    //$('.filter-phong-ban').on('change', function () {
-    //    pagination(1)
-    //})
-
     // lưu form sửa
     $('#Sua').on('click', function (e) {
         e.preventDefault();
@@ -201,7 +197,6 @@ $(document).ready(() => {
             
         })
     })
-   
 });
 function loadTable() {
     $('#nhanvien_table').load('/nv/table');
@@ -236,20 +231,15 @@ function editNV(id) {
 let pageIndex = 1
 let roomId = 0
 function pagination(page) {
+    console.log(page)
     pageIndex = page;
-    //$('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + $('.filter-phong-ban').val());
-    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + roomID);
-
-    //Tính toán lại số lượng page
-
-    //
+    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + roomId);
 }
 
-function room(id) {
+function Department(id) {
     console.log(id)
     roomId = id;
-    $('#nhanvien_table').load('/nv/table?Id=' + id);
-    paginaton(pageIndex)
+    $('#nhanvien_table').load('/nv/table?Id=' + roomId);
 }
 
 function next() {
@@ -259,4 +249,6 @@ function next() {
 function previsous() {
     pagination(pageIndex-1)
 }
+
+
 
