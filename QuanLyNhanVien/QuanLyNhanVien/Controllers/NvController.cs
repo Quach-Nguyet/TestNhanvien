@@ -16,7 +16,12 @@ namespace QuanLyNhanVien.Controllers
     {
         private readonly string connectionString = "Server=localhost;Port=5432;User Id=postgres;Password=123;Database=QuanLyNhanVien;";
         private readonly string DANH_SACH_NHAN_VIEN = "DanhSachNhanVien";
-        //  private readonly NhanVienRepository nhanVienRepository;
+         private readonly NhanVienRepository nhanVienRepository;
+
+        public NvController()
+        {
+            nhanVienRepository = new NhanVienRepository();
+        }
 
         public List<NhanVien> ConnectList()
         {
@@ -76,35 +81,6 @@ namespace QuanLyNhanVien.Controllers
 
         //    }
         //}
-        public List<NhanVien> Pagination(int page=1, int page_size = 5, int Id = 0)
-        {
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                if (page < 1) return new List<NhanVien>();
-                ViewBag.NameRoom = conn.Query<PhongBan>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
-                if (Id != 0)
-                {
-                    List<NhanVien>  dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
-                    {
-                        page,
-                        page_size,
-                        Id 
-                    }).ToList();
-                    return dsNhanVien;
-                }
-                else
-                {
-                    List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size", new
-                    {
-                        page,
-                        page_size
-                    }).ToList();
-                    return dsNhanVien;
-                }
-
-            }
-        }
         public static string MaNV(int i, string manv)
         {
             int ListCount = i + 10000;
@@ -340,17 +316,57 @@ namespace QuanLyNhanVien.Controllers
         {
             int rows;
             //var dsNhanVien = SessionExtension.GetList<NhanVien>(DANH_SACH_NHAN_VIEN);
-            var dsNhanVien = Pagination(page, page_size,Id);
+            var dsNhanVien = Pagination(page, page_size, Id);
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-              
-                     rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien").FirstOrDefault();
+
+                rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien WHERE \"PhongBan\" = @Id", new
+                {
+                    Id
+                }).FirstOrDefault();
                 ViewBag.TotalPages = Math.Ceiling((double)rows / page_size);
-                
+                ViewBag.DepartmentNames = GetDepartmentName();
+
             }
             return PartialView("_DanhSachNV", dsNhanVien);
         }
 
+        #region Private methods
+        private List<string> GetDepartmentName()
+        {
+            return null;
+        }
+        private List<NhanVien> Pagination(int page = 1, int page_size = 5, int Id = 0)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                if (page < 1) return new List<NhanVien>();
+                ViewBag.NameRoom = conn.Query<PhongBan>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
+                if (Id != 0)
+                {
+                    List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
+                    {
+                        page,
+                        page_size,
+                        Id
+                    }).ToList();
+                    return dsNhanVien;
+                }
+                else
+                {
+                    List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size", new
+                    {
+                        page,
+                        page_size
+                    }).ToList();
+                    return dsNhanVien;
+                }
+
+            }
+        }
+
+        #endregion
     }
 }

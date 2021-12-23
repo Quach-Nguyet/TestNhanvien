@@ -8,7 +8,7 @@ using System.Web;
 
 namespace QuanLyNhanVien.Repository
 {
-    public class NhanVienRepository : IRepository<NhanVien>
+    public class NhanVienRepository
     {
         private readonly NpgsqlConnection conn = new NpgsqlConnection("Server=localhost;Port=5432;User Id=postgres;Password=123;Database=QuanLyNhanVien;");
         public void Add(NhanVien item)
