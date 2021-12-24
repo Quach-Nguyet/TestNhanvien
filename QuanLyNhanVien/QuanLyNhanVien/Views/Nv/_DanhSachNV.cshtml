@@ -74,7 +74,7 @@
                     @Html.DisplayFor(modelItem => item.SoNamCongTac)
                 </td>
                 <td style="text-align: center">
-                    <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')"  style="">
+                    <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien',this)">
                         Sửa
                     </button>
                     <button class="btn btn-outline-danger" onclick="deleteNV('@item.MaNhanVien', this)">Xóa</button>

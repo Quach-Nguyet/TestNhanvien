@@ -61,12 +61,17 @@ namespace QuanLyNhanVien.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(NhanVien nv)
+        public ActionResult Create(NhanVien nv, string nameRoom)
         {
             object ketQua = null;
             var dsNhanVien = Pagination();
+            nv.Id = GetIdDepartment(nameRoom);
             nv.MaNhanVien = Guid.NewGuid();
             nv.HoVaTen = Fomart.Fomartstring(nv.HoVaTen);
+            nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
+            nv.ChucVu = Fomart.Fomartstring(nv.ChucVu);
+
+            //test phone
             bool TestPhone = Int32.TryParse(nv.SoDienThoai, out _);
             if (!TestPhone && nv.SoDienThoai.Length != 10)
             {
@@ -77,8 +82,8 @@ namespace QuanLyNhanVien.Controllers
                 };
             }
             if (ketQua != null) return Json(ketQua);
-            nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
-            nv.ChucVu = Fomart.Fomartstring(nv.ChucVu);
+
+            //test name
             foreach (var item in dsNhanVien)
             {
                 if (nv.HoVaTen == item.HoVaTen)
@@ -101,12 +106,13 @@ namespace QuanLyNhanVien.Controllers
                 }
             }
             if (ketQua != null) return Json(ketQua);
+
             dsNhanVien.Add(nv);
             SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac)", nv);
+                conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@Id)", nv);
             }
             return Json(new { success = true, status = true, data = nv, JsonRequestBehavior.AllowGet });
         }
@@ -115,7 +121,6 @@ namespace QuanLyNhanVien.Controllers
         public ActionResult Edit(Guid id)
         {
             var dsNhanVien = Pagination();
-
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == id);
             return Json(new
             {
@@ -126,11 +131,12 @@ namespace QuanLyNhanVien.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(NhanVien nvNew)
+        public ActionResult Edit(NhanVien nvNew, string newRoom)
         {
             var dsNhanVien = Pagination();
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == nvNew.MaNhanVien);
             object ketQua = null;
+            nvNew.Id = GetIdDepartment(newRoom);
             foreach (var item in dsNhanVien)
             {
                 if (nvNew.MaNhanVien != item.MaNhanVien)
@@ -174,11 +180,13 @@ namespace QuanLyNhanVien.Controllers
             nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
             nv.ChucVu = Fomart.Fomartstring(nvNew.ChucVu);
             nv.SoNamCongTac = nvNew.SoNamCongTac;
+            nv.Id = nvNew.Id;
+
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
                 conn.Execute("UPDATE public.nhan_vien SET \"MaNhanVien\" = @MaNhanVien, \"HoVaTen\" = @HoVaTen, \"NgaySinh\" = @NgaySinh, \"SoDienThoai\" = @SoDienThoai, \"DiaChi\" = @DiaChi, \"ChucVu\" = @ChucVu, \"SoNamCongTac\" = @SoNamCongTac" +
-                " WHERE \"MaNhanVien\" = @MaNhanVien", nv);
+                " \"PhongBan\" = @Id WHERE \"MaNhanVien\" = @MaNhanVien", nv);
             }
             SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
             return Json(new { success = true, status = true, data = dsNhanVien });
@@ -241,6 +249,26 @@ namespace QuanLyNhanVien.Controllers
                 tenPhong = conn.Query<string>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
             }
             return tenPhong;
+        }
+
+        private int GetIdDepartment(string nameRoom)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+               int Id = conn.Query<int>("SELECT id FROM public.phong_ban WHERE ten_phong_ban = @nameRoom",new {nameRoom}).FirstOrDefault();
+                return Id;
+            }
+        }
+
+        private List<PhongBan> Department()
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                List<PhongBan> phong = conn.Query<PhongBan>("SELECT * FROM public.phong_ban").ToList();
+                return phong;
+            }
         }
         private List<NhanVien> Pagination(int page = 1, int page_size = 5, int Id = 0)
         {

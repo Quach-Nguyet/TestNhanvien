@@ -217,6 +217,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\bootstrap.min.js.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -249,9 +250,7 @@
     <Content Include="Views\Nv\Index.cshtml" />
     <Content Include="Views\Sach\Index.cshtml" />
     <Content Include="Views\Nv\_DanhSachNV.cshtml" />
-    <Content Include="Views\Nv\_ModalThemMoi.cshtml" />
-    <Content Include="Views\Nv\_ModalSua.cshtml" />
-    <Content Include="Views\Nv\_ModalXoa.cshtml" />
+    <Content Include="Views\Nv\_DropDownModal.cshtml" />
     <Content Include="Views\Nv\_DropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>

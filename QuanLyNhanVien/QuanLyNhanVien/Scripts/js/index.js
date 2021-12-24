@@ -1,11 +1,12 @@
 ﻿
 
+//định dạng ngày
+Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
+
 $(document).ready(() => {
-    //định dạng ngày
-    Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
 
     // keyup, keydown, change, keypress
-       $("#Sreach").on("keyup", function () {
+    $("#Sreach").on("keyup", function () {
         var value = $(this).val().toLowerCase();
         $("#tableNhanVien tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
@@ -24,6 +25,7 @@ $(document).ready(() => {
             SoDienThoai: $('#form-sua').find('#Sua_SoDienThoai').val(),
             ChucVu: $('#form-sua').find('#Sua_ChucVu').val(),
             SoNamCongTac: $('#form-sua').find('#Sua_SoNamCongTac').val(),
+            Id: $('#form-sua').find('#Sua_PhongBan').val(),
         };
 
 
@@ -74,14 +76,13 @@ $(document).ready(() => {
 
         if (isValidate) {
             $.ajax({
-                url: 'Nv/Edit',
+                url: 'Nv/Edit?=' + nv.Id,
                 method: 'POST',
                 data: nv,
                 success: respon => {
                     if (respon.status) {
                         $('#SuaNhanVien').modal('hide');
                         $('#nhanvien_table').load('/nv/table');
-                        //table_nv.columns.adjust().draw();
 
                     }
                     else {
@@ -119,7 +120,7 @@ $(document).ready(() => {
             DiaChi: $('#ThemNhanVien').find('#DiaChi').val(),
             ChucVu: $('#ThemNhanVien').find('#ChucVu').val(),
             SoNamCongTac: $('#ThemNhanVien').find('#SoNamCongTac').val(),
-
+            Id: $('#ThemNhanVien').find('#PhongBan').val(),
         }
 
         let isValidate = true
@@ -168,7 +169,7 @@ $(document).ready(() => {
         if (!isValidate) return
 
         $.ajax({
-            url: '/Nv/Create',
+            url: '/Nv/Create?nameRoom=' + data.Id,
             method: 'POST',
             data: data,
             success: respon => {
@@ -197,6 +198,13 @@ $(document).ready(() => {
             
         })
     })
+
+    $('.filter-phong-ban').on('change', function () {
+        pagination(1)
+    })
+    $("#SuaNhanVien").on('modal.show', function () {
+        console.log("Show");
+    })
 });
 function loadTable() {
     $('#nhanvien_table').load('/nv/table');
@@ -217,30 +225,33 @@ function deleteNV(id, tableRow) {
 function editNV(id) {
     $.ajax('/Nv/Edit?id=' + id).then(respon => {
         const nv = respon.data
+        console.log(nv)
         $('#form-sua').find('#Sua_MaNhanVien').val(nv.MaNhanVien);
         $('#form-sua').find('#Sua_HoVaTen').val(nv.HoVaTen);
-        $('#form-sua').find('#Sua_NgaySinh').val(moment(nv.NgaySinh).format('DD-MM-YYYY'));
+        $('#form-sua').find('#Sua_NgaySinh').val(moment(nv.NgaySinh).format('DD/MM/YYYY'));
         $('#form-sua').find('#Sua_DiaChi').val(nv.DiaChi);
         $('#form-sua').find('#Sua_SoDienThoai').val(nv.SoDienThoai);
         $('#form-sua').find('#Sua_ChucVu').val(nv.ChucVu);
         $('#form-sua').find('#Sua_SoNamCongTac').val(nv.SoNamCongTac);
-        $('#SuaNhanVien').modal('show');
+            $('#SuaNhanVien').modal('show');
     }).catch(error => console.log(error))
 }
 
+
 let pageIndex = 1
 let roomId = 0
-function pagination(page) {
-    console.log(page)
-    pageIndex = page;
-    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + roomId);
+function room(id) {
+        console.log(id)
+        roomId = id;
+        $('#nhanvien_table').load('/nv/table?Id=' + id);
 }
 
-function Department(id) {
-    console.log(id)
-    roomId = id;
-    $('#nhanvien_table').load('/nv/table?Id=' + roomId);
+function pagination(page) {
+    pageIndex = page;
+    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + $('.filter-phong-ban').val());
 }
+
+
 
 function next() {
     pagination(pageIndex+1)
