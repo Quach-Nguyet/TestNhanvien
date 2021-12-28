@@ -7,6 +7,15 @@ using System.Web.Mvc;
 using Dapper;
 using Npgsql;
 using QuanLyNhanVien.Repository;
+using System.IO;
+using OfficeOpenXml;
+using System.Web.UI.WebControls;
+using OfficeOpenXml.Table;
+using System.Drawing;
+using System.Net.Mime;
+using System.Data;
+using System.Reflection;
+using OfficeOpenXml.Style;
 
 namespace QuanLyNhanVien.Controllers
 {
@@ -65,7 +74,6 @@ namespace QuanLyNhanVien.Controllers
         {
             object ketQua = null;
             var dsNhanVien = Pagination();
-            nv.Id = GetIdDepartment(nameRoom);
             nv.MaNhanVien = Guid.NewGuid();
             nv.HoVaTen = Fomart.Fomartstring(nv.HoVaTen);
             nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
@@ -112,7 +120,7 @@ namespace QuanLyNhanVien.Controllers
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@Id)", nv);
+                conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
             }
             return Json(new { success = true, status = true, data = nv, JsonRequestBehavior.AllowGet });
         }
@@ -136,7 +144,6 @@ namespace QuanLyNhanVien.Controllers
             var dsNhanVien = Pagination();
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == nvNew.MaNhanVien);
             object ketQua = null;
-            nvNew.Id = GetIdDepartment(newRoom);
             foreach (var item in dsNhanVien)
             {
                 if (nvNew.MaNhanVien != item.MaNhanVien)
@@ -180,13 +187,13 @@ namespace QuanLyNhanVien.Controllers
             nv.DiaChi = Fomart.Fomartstring(nvNew.DiaChi);
             nv.ChucVu = Fomart.Fomartstring(nvNew.ChucVu);
             nv.SoNamCongTac = nvNew.SoNamCongTac;
-            nv.Id = nvNew.Id;
+            nv.PhongBan = nvNew.PhongBan;
 
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                conn.Execute("UPDATE public.nhan_vien SET \"MaNhanVien\" = @MaNhanVien, \"HoVaTen\" = @HoVaTen, \"NgaySinh\" = @NgaySinh, \"SoDienThoai\" = @SoDienThoai, \"DiaChi\" = @DiaChi, \"ChucVu\" = @ChucVu, \"SoNamCongTac\" = @SoNamCongTac" +
-                " \"PhongBan\" = @Id WHERE \"MaNhanVien\" = @MaNhanVien", nv);
+                conn.Execute("UPDATE public.nhan_vien SET \"MaNhanVien\" = @MaNhanVien, \"HoVaTen\" = @HoVaTen, \"NgaySinh\" = @NgaySinh, \"SoDienThoai\" = @SoDienThoai, \"DiaChi\" = @DiaChi, \"ChucVu\" = @ChucVu, \"SoNamCongTac\" = @SoNamCongTac," +
+                " \"PhongBan\" = @PhongBan WHERE \"MaNhanVien\" = @MaNhanVien", nv);
             }
             SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
             return Json(new { success = true, status = true, data = dsNhanVien });
@@ -238,6 +245,33 @@ namespace QuanLyNhanVien.Controllers
             }
             return PartialView("_DropDown", room);
         }
+        [HttpGet]
+        public JsonResult getPhongBan()
+        {
+            List<PhongBan> data;
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                data = conn.Query<PhongBan>("SELECT * FROM public.phong_ban").ToList();
+            }
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public ActionResult Export(int Id = 0)
+        {
+            var listNhanVien = ConnectList(Id);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var excelPackage = new ExcelPackage(new MemoryStream()))
+            {
+                excelPackage.Workbook.Worksheets.Add("First Sheet");
+                var workSheet = excelPackage.Workbook.Worksheets["First Sheet"];
+                workSheet.Cells[1, 1].LoadFromCollection(listNhanVien, true, TableStyles.Dark9);
+                FormatForExcel(workSheet, listNhanVien);
+                return File(excelPackage.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "QuanLyNhanVien.xlsx");
+            }
+        }
 
         #region Private methods
         private List<string> GetDepartmentName()
@@ -270,33 +304,89 @@ namespace QuanLyNhanVien.Controllers
                 return phong;
             }
         }
-        private List<NhanVien> Pagination(int page = 1, int page_size = 5, int Id = 0)
+        private List<NhanVien> Pagination(int page = 1, int page_size = 5, int Id = 0, string keyword="")
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
                 if (page < 1) return new List<NhanVien>();
                 ViewBag.NameRoom = conn.Query<PhongBan>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
+                List<NhanVien> dsNhanVien = new List<NhanVien>();
                 if (Id != 0)
                 {
-                    List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
+                     dsNhanVien= conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id AND \"HoVaTen\" LIKE '%"+keyword+"%' ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size ", new
                     {
                         page,
                         page_size,
                         Id
                     }).ToList();
-                    return dsNhanVien;
+                    
                 }
                 else
                 {
-                    List<NhanVien> dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size", new
+                    dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC OFFSET((@page - 1)*@page_size) LIMIT @page_size", new
                     {
                         page,
                         page_size
                     }).ToList();
-                    return dsNhanVien;
+                    
                 }
+                foreach (var nhanVien in dsNhanVien)
+                {
+                    int phong_ban_id = nhanVien.PhongBan;
+                    nhanVien.phong_ban = conn.Query<PhongBan>("select * from public.phong_ban where \"id\" = @phong_ban_id", new { phong_ban_id }).FirstOrDefault();
+                }
+                return dsNhanVien;
+            }
+        }
 
+        private List<NhanVien> ConnectList(int Id = 0)
+        {
+            List<NhanVien> dsNhanVien;
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+
+                conn.Open();
+                if(Id != 0) dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC", new { Id }).ToList();
+                else dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC").ToList();
+            }
+            return dsNhanVien;
+        }
+
+        private void FormatForExcel(ExcelWorksheet worksheet, List<NhanVien> listNhanVien)
+        {
+            worksheet.DefaultColWidth = 20;
+            worksheet.Cells.Style.WrapText = true;
+            worksheet.Cells[1, 1].Value = "STT";
+            worksheet.Cells[1, 2].Value = "Mã hhân viên";
+            worksheet.Cells[1, 3].Value = "Họ và tên";
+            worksheet.Cells[1, 4].Value = "Ngày sinh";
+            worksheet.Cells[1, 5].Value = "Số điện thoại";
+            worksheet.Cells[1, 6].Value = "Địa chỉ";
+            worksheet.Cells[1, 7].Value = "Chức Vụ";
+            worksheet.Cells[1, 8].Value = "Số năm công tác";
+            worksheet.Cells[1, 9].Value = "Id Phòng Ban";
+
+            using (var range = worksheet.Cells["A1:I1"])
+            {
+                range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                range.Style.Font.SetFromFont(new System.Drawing.Font("Times new roman", 14));
+                range.Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
+                range.Style.Border.Bottom.Color.SetColor(Color.Gray);
+            }
+
+            for (int i=0; i < listNhanVien.Count; i++)
+            {
+                var item = listNhanVien[i];
+                worksheet.Cells[i + 2, 1].Value = i + 1;
+                worksheet.Cells[i + 2, 2].Value = item.MaNhanVien;
+                worksheet.Cells[i + 2, 3].Value = item.HoVaTen;
+                worksheet.Cells[i + 2, 4].Value = item.NgaySinh;
+                worksheet.Cells[i + 2, 5].Value = item.SoDienThoai;
+                worksheet.Cells[i + 2, 6].Value = item.DiaChi;
+                worksheet.Cells[i + 2, 7].Value = item.ChucVu;
+                worksheet.Cells[i + 2, 8].Value = item.SoNamCongTac;
+                worksheet.Cells[i + 2, 9].Value = item.PhongBan;
             }
         }
 

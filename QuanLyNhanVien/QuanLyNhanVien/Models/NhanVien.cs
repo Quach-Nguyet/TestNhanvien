@@ -1,9 +1,6 @@
-﻿using Npgsql;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.SqlClient;
-using System.Windows;
 
 namespace QuanLyNhanVien.Models
 {
@@ -40,17 +37,19 @@ namespace QuanLyNhanVien.Models
 
         [Column("so_nam_cong_tac")]
         public int SoNamCongTac { get; set; }
-
-        public int Id { get; set; }
+        [ForeignKey(nameof(phong_ban))]
+        public int PhongBan { get; set; }
+        
+        public PhongBan phong_ban { get; set; }
     }
-
     public abstract class BaseEntity
     {
     }
-
+    [Table("phong_ban", Schema = "public")]
     public class PhongBan
     {
-        public int Id { get; set; }
-        public string Ten_phong_ban { get; set; }
+        [Key]
+        public int id { get; set; }
+        public string ten_phong_ban { get; set; }
     }
 }

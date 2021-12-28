@@ -194,3 +194,8 @@ E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Text.Json
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Threading.Channels.xml
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.Threading.Tasks.Extensions.xml
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.ValueTuple.xml
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\EPPlus.dll
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Microsoft.IO.RecyclableMemoryStream.dll
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.ComponentModel.Annotations.dll
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\EPPlus.xml
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Microsoft.IO.RecyclableMemoryStream.xml
