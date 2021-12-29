@@ -1,5 +1,8 @@
 ﻿
 
+let pageIndex = 1
+let roomId = 0
+var keySreach = ""
 //định dạng ngày
 Inputmask({ alias: "datetime", inputFormat: "dd/mm/yyyy" }).mask(".js-date");
 
@@ -12,15 +15,15 @@ $(document).ready(() => {
             })
         }
     })
-    // keyup, keydown, change, keypress
-    $("#Sreach").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#tableNhanVien tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-       });
 
-    // lưu form sửa
+    //Mở form sửa
+    $("#form-data").on('click', ".btnSua", function (e) {
+        const id = $(this).attr('data-id')
+        e.preventDefault()
+        editNV(id);
+    })
+
+    //Lưu form sửa
     $('#Sua').on('click', function (e) {
         e.preventDefault();
         let ngaysinh = $('#form-sua').find('#Sua_NgaySinh').val();
@@ -34,7 +37,6 @@ $(document).ready(() => {
             SoNamCongTac: $('#form-sua').find('#Sua_SoNamCongTac').val(),
             Id: $('#form-sua').find('#Sua_PhongBan').val(),
             PhongBan: $('#update-room').val()
-            //Id: $('#Sua_PhongBan :selected').text(),
         };
 
 
@@ -130,7 +132,6 @@ $(document).ready(() => {
             SoNamCongTac: $('#ThemNhanVien').find('#SoNamCongTac').val(),
             Id: $('#ThemNhanVien').find('#PhongBan').val(),
             PhongBan: $('#insert-room').val()
-            //Id: $('#insert-room option:selected').text(),
         }
 
         let isValidate = true
@@ -209,20 +210,22 @@ $(document).ready(() => {
         })
     })
 
+    //Phân trang theo ban
     $('.filter-phong-ban').on('change', function () {
         pagination(1)
     })
 
-    $("#SuaNhanVien").on('modal.show', function () {
-        console.log("Show");
-    })
-
-    $("#form-data").on('click', ".btnSua", function (e) {
-        const id = $(this).attr('data-id')
+    //Tìm kiếm
+    $("#form-data").on('click', "#btnSreach", function (e) {
         e.preventDefault()
-        editNV(id);
+        const key = $('#keySreach').val();
+        $('#nhanvien_table').load(`/nv/table?page=${pageIndex}&id=${$('.filter-phong-ban').val()}&keyword=${key}`);
     })
-   
+    //Xuất Ex
+    $("#form-data").on('click', "#Export", function (e) {
+        e.preventDefault()
+        location.href = "/nv/export?Id=" + $('.filter-phong-ban').val();
+    })
 });
 function loadTable() {
     $('#nhanvien_table').load('/nv/table');
@@ -256,9 +259,6 @@ function editNV(id) {
     }).catch(error => console.log(error))
 }
 
-
-let pageIndex = 1
-let roomId = 0
 function room(id) {
         roomId = id;
         $('#nhanvien_table').load('/nv/table?Id=' + id);
@@ -266,7 +266,7 @@ function room(id) {
 
 function pagination(page) {
     pageIndex = page;
-    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + $('.filter-phong-ban').val());
+    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + $('.filter-phong-ban').val() + '&keyword=' + $('#keySreach').val());
 }
 
 function next() {
@@ -277,10 +277,4 @@ function previsous() {
     pagination(pageIndex-1)
 }
 
-function exportExecl(e) {
-    e.preventDefault()
-    // $('#nhanvien_table').load('/nv/table?Id=' + $('.filter-phong-ban').val());
-    console.log($('.filter-phong-ban').val())
-    location.href = "/nv/export?Id=" + $('.filter-phong-ban').val();
-}
 

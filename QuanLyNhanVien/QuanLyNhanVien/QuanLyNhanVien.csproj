@@ -187,7 +187,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ApiStaffController.cs" />
     <Compile Include="Controllers\NvController.cs" />
     <Compile Include="Controllers\SachController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
@@ -197,7 +196,6 @@
     </Compile>
     <Compile Include="Models\Fomart.cs" />
     <Compile Include="Models\NhanVien.cs" />
-    <Compile Include="Models\NhanVienTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -257,12 +255,9 @@
     <Content Include="Views\Staff\Index.cshtml" />
     <Content Include="Views\Staff\Create.cshtml" />
     <Content Include="Views\Staff\Edit.cshtml" />
-    <Content Include="Views\Staff\Update.cshtml" />
-    <Content Include="Views\Staff\Report.cshtml" />
     <Content Include="Views\Nv\Index.cshtml" />
     <Content Include="Views\Sach\Index.cshtml" />
     <Content Include="Views\Nv\_DanhSachNV.cshtml" />
-    <Content Include="Views\Nv\_DropDownModal.cshtml" />
     <Content Include="Views\Nv\_DropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
