@@ -1,6 +1,7 @@
 ﻿
 let pageIndex = 1
 let roomId = 0
+let maxPage = 0
 var keySreach = ""
 
 //định dạng ngày
@@ -118,7 +119,7 @@ $(document).ready(() => {
     })
 
     //Lưu form thêm
-    $('#form-them').on('click', '#Them', function (e) {
+    $('#Them').on('click', function (e) {
         e.preventDefault()
         let ngaysinh = $('#ThemNhanVien').find('#NgaySinh').val()
         const data = {
@@ -272,12 +273,17 @@ function pagination(page) {
     $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + $('.filter-phong-ban').val() + '&keyword=' + $('#keySreach').val());
 }
 
-function next() {
-    pagination(pageIndex+1)
+function next(max) {
+    maxPage= max;
+    if (pageIndex < max) {
+        pagination(pageIndex + 1)
+    }
 }
 
 function previsous() {
-    pagination(pageIndex-1)
+    if (pageIndex > 1) {
+        pagination(pageIndex - 1)
+    }
 }
 
 

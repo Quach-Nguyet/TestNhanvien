@@ -1,39 +1,4 @@
 ﻿@model IEnumerable<QuanLyNhanVien.Models.NhanVien>
-@*@model List<QuanLyNhanVien.Models.NhanVien>
-
-    <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien"  cellspacing="0">
-        <thead>
-            <tr style="text-align: center ">
-                <th>Mã nhân viên</th>
-                <th>Họ tên</th>
-                <th>Ngày sinh</th>
-                <th>Địa chỉ</th>
-                <th>SĐT</th>
-                <th>Chức vụ</th>
-                <th id="nam" style="text-align:center">Số năm công tác</th>
-                <th>Lựa chọn</th>
-            </tr>
-        </thead>
-        <tbody id="tableNhanVien">
-            @foreach (var item in Model) {
-                <tr>
-                    <td>@item.MaNhanVien</td>
-                    <td>@item.HoVaTen</td>
-                    <td>@item.NgaySinh.ToString("dd/MM/yyyy")</td>
-                    <td>@item.DiaChi</td>
-                    <td>@item.SoDienThoai</td>
-                    <td>@item.ChucVu</td>
-                    <td style="text-align: center">@item.SoNamCongTac</td>
-                    <td style="text-align: center">
-                        <button class="btn btn-outline-secondary" onclick="editNV('@item.MaNhanVien')" >
-                            Sửa
-                        </button>
-                        <button class="btn btn-outline-danger" onclick="deleteNV('@item.MaNhanVien', this)">Xóa</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@
 
 <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien" cellspacing="0">
     <thead>
@@ -101,7 +66,7 @@
             <li class="page-item"><a class="page-link" onclick="pagination(@item)">@item</a></li>
         }
         <li class="page-item">
-            <a class="page-link" onclick="next()" aria-label="Next">
+            <a class="page-link" onclick="next(@ViewBag.TotalPages)" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Sau</span>
             </a>

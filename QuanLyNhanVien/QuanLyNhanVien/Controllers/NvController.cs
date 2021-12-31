@@ -216,7 +216,7 @@ namespace QuanLyNhanVien.Controllers
                 {
                     rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien WHERE \"PhongBan\" = @Id " +
                         "AND (LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
-                        "OR \"NgaySinh\"::TEXT LIKE '%" + keyword + "%' " +
+                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
                         "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
@@ -225,7 +225,7 @@ namespace QuanLyNhanVien.Controllers
                 else if (keyword != ""){
                     rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien WHERE " +
                         "LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
-                        "OR \"NgaySinh\"::TEXT LIKE '%" + keyword + "%' " +
+                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
                         "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
@@ -287,7 +287,7 @@ namespace QuanLyNhanVien.Controllers
                 {
                     dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id " +
                         "AND (LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
-                        "OR \"NgaySinh\"::TEXT LIKE '%" + keyword + "%' " +
+                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
                         "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
@@ -304,7 +304,7 @@ namespace QuanLyNhanVien.Controllers
                 {
                     dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE " +
                         "LOWER(\"HoVaTen\") LIKE '%"+keyword+"%' " +
-                        "OR \"NgaySinh\"::TEXT LIKE '%" + keyword + "%' " +
+                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
                         "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
                         "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +

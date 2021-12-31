@@ -34,7 +34,7 @@
 
     .dropdown {
         height: 25%;
-        width: 20%;
+        width: 200px;
         margin-top: 20px;
         background: whitesmoke;
         border: 3px solid #49aff2;
@@ -114,7 +114,7 @@
                     </div>
                     <div class="d-flex">
                         <button class="btn btn-success" id="Them"> Lưu </button>
-                        <button type="button" class="btn btn-outline-secondary" style="margin-left: 1rem;" data-dismiss="modal">Hủy</button>
+                        <button  class="btn btn-outline-secondary" style="margin-left: 1rem;" onclick="$('#ThemNhanVien').modal('hide');">Hủy</button>
                     </div>
                 </form>
             </div>
@@ -168,7 +168,7 @@
                     </div>
                     <div class="d-flex">
                         <button class="btn btn-success" id="Sua"> Sửa và lưu </button>
-                        <button class="btn btn-secondary" data-dismiss="modal" style="margin-left: 1rem;">Hủy</button>
+                        <button class="btn btn-secondary" style="margin-left: 1rem;" onclick="$('#SuaNhanVien').modal('hide');">Hủy</button>
                     </div>
                 </form>
             </div>
