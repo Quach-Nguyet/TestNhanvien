@@ -12,6 +12,7 @@ $(document).ready(() => {
             $.each(xhr.data, function (i, item) {
                 $('#insert-room').append(`<option value= ${item.id}>${item.ten_phong_ban}</option>`);
                 $('#update-room').append(`<option value= ${item.id}>${item.ten_phong_ban}</option>`);
+                $('#dropdown-room').append(`<option value=${item.id}>${item.ten_phong_ban}</option>`);
             })
         }
     })
@@ -259,10 +260,10 @@ function editNV(id) {
     }).catch(error => console.log(error))
 }
 
-function room(id) {
-        roomId = id;
-        $('#nhanvien_table').load('/nv/table?Id=' + id);
-}
+//function room(id) {
+//        roomId = id;
+//        $('#nhanvien_table').load('/nv/table?Id=' + id);
+//}
 
 function pagination(page) {
     pageIndex = page;

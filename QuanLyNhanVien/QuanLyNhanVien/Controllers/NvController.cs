@@ -82,6 +82,7 @@ namespace QuanLyNhanVien.Controllers
                         success = false,
                         message = "*Số điện thoại đã có. Yêu cầu nhập lại",
                         status = false
+                    
                     };
                 }
             }
@@ -92,7 +93,19 @@ namespace QuanLyNhanVien.Controllers
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
+                var Insert = conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
+                if (Insert == 0 )
+                {
+
+                    ketQua = new
+                    {
+                        success = false,
+                        message = "*Dữ liệu chưa được update",
+                        status = false
+
+                    };
+
+                }
             }
             return Json(new { success = true, status = true, data = nv, JsonRequestBehavior.AllowGet });
         }

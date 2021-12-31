@@ -3,10 +3,3 @@
 @model List<QuanLyNhanVien.Models.PhongBan>
 
 
-<select class="form-control filter-phong-ban dropdown">
-    <option type="button" value="0" onclick="room(0)"> Tất cả </option>
-    @foreach (var item in Model)
-    {
-        <option type="button" value="@item.id" onclick="room(@item.id)">@item.ten_phong_ban</option>
-    }
-</select>

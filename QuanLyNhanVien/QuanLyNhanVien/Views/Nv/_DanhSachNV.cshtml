@@ -89,14 +89,14 @@
 <nav aria-label="Page navigation example" id="phan_trang" style="float:right">
     <ul class="pagination">
         <li class="page-item">
-            <a class="page-link" onclick="previsous()" aria-label="Previous" >
+            <a class="page-link" onclick="previsous()" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Trước</span>
             </a>
         </li>
         @for (int item = 1; item <= ViewBag.TotalPages; item++)
         {
-                <li class="page-item"><a class="page-link" onclick="pagination(@item)">@item</a></li>
+            <li class="page-item"><a class="page-link" onclick="pagination(@item)">@item</a></li>
         }
         <li class="page-item">
             <a class="page-link" onclick="next()" aria-label="Next">
