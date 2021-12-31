@@ -19,19 +19,12 @@ namespace QuanLyNhanVien.Controllers
     public class NvController : Controller
     {
         private readonly string connectionString = "Server=localhost;Port=5432;User Id=postgres;Password=123;Database=QuanLyNhanVien;";
-        private readonly string DANH_SACH_NHAN_VIEN = "DanhSachNhanVien";
-         private readonly NhanVienRepository nhanVienRepository;
 
         // GET: Staff
-        public NvController()
-        {
-            nhanVienRepository = new NhanVienRepository();
-        }
         public ActionResult Index()
 
         {
-            List<NhanVien> dsNhanVien = Pagination();
-            ViewBag.DepartmentNames = GetDepartmentName();
+            List<NhanVien> dsNhanVien = ConnectList();
             return View("Index", dsNhanVien);
         }
 
@@ -45,15 +38,15 @@ namespace QuanLyNhanVien.Controllers
         public ActionResult Create(NhanVien nv)
         {
             object ketQua = null;
-            var dsNhanVien = Pagination();
+            var dsNhanVien = ConnectList();
             nv.MaNhanVien = Guid.NewGuid();
             nv.HoVaTen = Fomart.Fomartstring(nv.HoVaTen);
             nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
             nv.ChucVu = Fomart.Fomartstring(nv.ChucVu);
 
-            //test phone
+            
             bool TestPhone = Int32.TryParse(nv.SoDienThoai, out _);
-            if (!TestPhone && nv.SoDienThoai.Length != 10)
+            if (!TestPhone || nv.SoDienThoai.Length != 10)
             {
                 ketQua = new
                 {
@@ -63,7 +56,7 @@ namespace QuanLyNhanVien.Controllers
             }
             if (ketQua != null) return Json(ketQua);
 
-            //test name
+            
             foreach (var item in dsNhanVien)
             {
                 if (nv.HoVaTen == item.HoVaTen)
@@ -89,11 +82,11 @@ namespace QuanLyNhanVien.Controllers
             if (ketQua != null) return Json(ketQua);
 
             dsNhanVien.Add(nv);
-            SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                var Insert = conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
+                var Insert = conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") " +
+                                          "VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
                 if (Insert == 0 )
                 {
 
@@ -106,6 +99,7 @@ namespace QuanLyNhanVien.Controllers
                     };
 
                 }
+                if (ketQua != null) return Json(ketQua);
             }
             return Json(new { success = true, status = true, data = nv, JsonRequestBehavior.AllowGet });
         }
@@ -113,7 +107,7 @@ namespace QuanLyNhanVien.Controllers
         [HttpGet]
         public ActionResult Edit(Guid id)
         {
-            var dsNhanVien = Pagination();
+            var dsNhanVien = ConnectList();
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == id);
             return Json(new
             {
@@ -124,9 +118,9 @@ namespace QuanLyNhanVien.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(NhanVien nvNew, string newRoom)
+        public ActionResult Edit(NhanVien nvNew)
         {
-            var dsNhanVien = Pagination();
+            var dsNhanVien = ConnectList();
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == nvNew.MaNhanVien);
             object ketQua = null;
             foreach (var item in dsNhanVien)
@@ -177,14 +171,26 @@ namespace QuanLyNhanVien.Controllers
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                conn.Execute("UPDATE public.nhan_vien SET \"MaNhanVien\" = @MaNhanVien, \"HoVaTen\" = @HoVaTen, \"NgaySinh\" = @NgaySinh, \"SoDienThoai\" = @SoDienThoai, \"DiaChi\" = @DiaChi, \"ChucVu\" = @ChucVu, \"SoNamCongTac\" = @SoNamCongTac," +
+                var Update = conn.Execute("UPDATE public.nhan_vien SET \"MaNhanVien\" = @MaNhanVien, \"HoVaTen\" = @HoVaTen, \"NgaySinh\" = @NgaySinh, \"SoDienThoai\" = @SoDienThoai, \"DiaChi\" = @DiaChi, \"ChucVu\" = @ChucVu, \"SoNamCongTac\" = @SoNamCongTac," +
                 " \"PhongBan\" = @PhongBan WHERE \"MaNhanVien\" = @MaNhanVien", nv);
+                if (Update == 0)
+                {
+
+                    ketQua = new
+                    {
+                        success = false,
+                        message = "*Dữ liệu chưa được update",
+                        status = false
+
+                    };
+
+                }
+                if (ketQua != null) return Json(ketQua);
             }
-            SessionExtension.SetList(DANH_SACH_NHAN_VIEN, dsNhanVien);
             return Json(new { success = true, status = true, data = dsNhanVien });
 
         }
-
+        [HttpGet]
         public ActionResult Delete(Guid ma)
         {
             var dsNhanVien = Pagination();
@@ -195,7 +201,7 @@ namespace QuanLyNhanVien.Controllers
                 conn.Open();
                 conn.Execute("DELETE FROM public.nhan_vien WHERE \"MaNhanVien\" = @ma", new { ma });
             }
-            return Json(new { success = true, status = true, data = dsNhanVien });
+            return Json(new { success = true, status = true, data=dsNhanVien}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Table(int page = 1, int page_size = 5, int Id = 0, string keyword = "")
@@ -253,9 +259,9 @@ namespace QuanLyNhanVien.Controllers
         }
 
         [HttpGet]
-        public ActionResult Export(int Id = 0)
+        public ActionResult Export(int Id = 0, string keyword = "")
         {
-            var listNhanVien = ConnectList(Id);
+            var listNhanVien = ConnectList(Id, keyword);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage(new MemoryStream()))
             {
@@ -267,18 +273,7 @@ namespace QuanLyNhanVien.Controllers
             }
         }
 
-        #region Methods
-        private List<string> GetDepartmentName()
-        {
-            List<string> tenPhong;
-            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                tenPhong = conn.Query<string>("SELECT ten_phong_ban FROM public.phong_ban").ToList();
-            }
-            return tenPhong;
-        }
-
+        #region
         private List<NhanVien> Pagination(int page = 1, int page_size = 5, int Id = 0, string keyword = "")
         {
             keyword = keyword.ToLower();
@@ -347,15 +342,43 @@ namespace QuanLyNhanVien.Controllers
             }
         }
 
-        private List<NhanVien> ConnectList(int Id = 0)
+        private List<NhanVien> ConnectList(int Id = 0, string keyword="")
         {
             List<NhanVien> dsNhanVien;
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
 
                 conn.Open();
-                if(Id != 0) dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien  WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC", new { Id }).ToList();
+                if (Id!=0 && keyword != "")
+                {
+                    dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE \"PhongBan\" = @Id " +
+                           "AND (LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
+                           "OR \"NgaySinh\"::TEXT LIKE '%" + keyword + "%' " +
+                           "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
+                           "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
+                           "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
+                           "OR \"SoNamCongTac\"::TEXT LIKE '%" + keyword + "%' " +
+                           ") ORDER BY \"HoVaTen\" ASC ", new{Id}).ToList();
+
+                }
+                else if(Id != 0) dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien  WHERE \"PhongBan\" = @Id ORDER BY \"HoVaTen\" ASC", new { Id }).ToList();
+                else if (keyword != "")
+                {
+                    dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien WHERE " +
+                        "LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
+                        "OR \"NgaySinh\"::TEXT LIKE '%" + keyword + "%' " +
+                        "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
+                        "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
+                        "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
+                        "OR \"SoNamCongTac\"::TEXT LIKE '%" + keyword + "%' " +
+                        "ORDER BY \"HoVaTen\" ASC ").ToList();
+                }
                 else dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien ORDER BY \"HoVaTen\" ASC").ToList();
+                foreach (var nhanVien in dsNhanVien)
+                {
+                    int phong_ban_id = nhanVien.PhongBan;
+                    nhanVien.phong_ban = conn.Query<PhongBan>("select * from public.phong_ban where \"id\" = @phong_ban_id", new { phong_ban_id }).FirstOrDefault();
+                }
             }
             return dsNhanVien;
         }
@@ -363,7 +386,7 @@ namespace QuanLyNhanVien.Controllers
         private void FormatForExcel(ExcelWorksheet worksheet, List<NhanVien> listNhanVien)
         {
             worksheet.DefaultColWidth = 20;
-            worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
             worksheet.Cells.Style.WrapText = true;
             worksheet.Cells[1, 1].Value = "STT";
             worksheet.Cells[1, 2].Value = "Mã hhân viên";
