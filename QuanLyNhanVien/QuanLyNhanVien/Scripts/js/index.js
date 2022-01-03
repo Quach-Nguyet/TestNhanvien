@@ -199,9 +199,10 @@ $(document).ready(() => {
                     })
                 }
             },
-            error: respon => $.toast({
+            error:
+                respon => $.toast({
                     heading: 'Thông báo',
-                    text: respon.message,
+                    text: "Sever không nhận được dữ liệu",
                     showHideTransition: 'fade',
                     icon: 'error',
                     position: 'top-center'
