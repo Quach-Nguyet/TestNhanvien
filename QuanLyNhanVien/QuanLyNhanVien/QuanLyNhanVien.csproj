@@ -240,6 +240,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\js\index.js" />
+    <Content Include="Scripts\js\inputmask.date.extensions.js" />
+    <Content Include="Scripts\js\inputmask.dependencyLib.js" />
+    <Content Include="Scripts\js\inputmask.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

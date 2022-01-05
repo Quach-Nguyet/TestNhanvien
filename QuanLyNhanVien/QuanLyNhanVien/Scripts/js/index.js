@@ -1,7 +1,10 @@
 ﻿
 let pageIndex = 1
+let pageSize = 1
 let roomId = 0
 let maxPage = 0
+let stt = 1
+let index = 1
 var keySreach = ""
 
 //định dạng ngày
@@ -17,6 +20,7 @@ $(document).ready(() => {
             })
         }
     })
+
 
     //Mở form sửa
     $("#form-data").on('click', ".btnSua", function (e) {
@@ -87,13 +91,13 @@ $(document).ready(() => {
 
         if (isValidate) {
             $.ajax({
-                url: 'Nv/Edit',
+                url: '/nv/Edit',
                 method: 'POST',
                 data: nv,
                 success: respon => {
                     if (respon.status) {
                         $('#SuaNhanVien').modal('hide');
-                        $('#nhanvien_table').load('/nv/table');
+                        pagination();
                     }
                     else {
                         $.toast({
@@ -187,7 +191,7 @@ $(document).ready(() => {
                 if (respon.success) {
                     $('#ThemNhanVien').modal('hide');
                     alert('Lưu thành công!');
-                    $('#nhanvien_table').load('/nv/table');
+                    pagination();
                 }
                 else {
                     $.toast({
@@ -223,30 +227,30 @@ $(document).ready(() => {
         pagination(1)
     })
 
+    $('.filter-page-size').on('change', function () {
+        pagination(1)
+    })
+
     //Tìm kiếm
     $("#form-data").on('click', "#btnSreach", function (e) {
         e.preventDefault()
         const key = $('#keySreach').val();
-        $('#nhanvien_table').load(`/nv/table?page=${pageIndex}&id=${$('.filter-phong-ban').val()}&keyword=${key}`);
+        $('#nhanvien_table').load(`/nv/table?page=${pageIndex}&page_size=${$('.filter-page-size').val()}&id=${$('.filter-phong-ban').val()}&keyword=${key}`);
     })
 
     //Xuất Ex
     $("#form-data").on('click', "#Export", function (e) {
         e.preventDefault()
-        location.href = "/nv/export?Id=" + $('.filter-phong-ban').val() + "&keyword=" + $('#keySreach').val();
+        location.href = "/nv/export?page_size=" + $('.filter-page-size').val() +"&phongbanid=" + $('.filter-phong-ban').val() + "&keyword=" + $('#keySreach').val();
     })
 });
-
-function loadTable() {
-    $('#nhanvien_table').load('/nv/table');
-}
 
 function deleteNV(id, tableRow) {
     let confirmed = confirm("Bạn có chắc chắn muốn xóa nhân viên này?");
     if (confirmed) {
         $.ajax('/Nv/Delete?ma=' + id).then(respon => {
             if (respon.success) {
-                $('#nhanvien_table').load('/nv/table');
+                pagination();
             }
         })
     }
@@ -271,7 +275,9 @@ function editNV(id) {
 
 function pagination(page) {
     pageIndex = page;
-    $('#nhanvien_table').load('/nv/table?page=' + page + '&id=' + $('.filter-phong-ban').val() + '&keyword=' + $('#keySreach').val());
+    $('#nhanvien_table').load('/nv/table?page=' + page + '&page_size=' + $('.filter-page-size').val() + '&phongbanid=' + $('.filter-phong-ban').val() + '&keyword=' + $('#keySreach').val()
+        + '&index=' + $('.Stt').val()
+    );
 }
 
 function next(max) {
@@ -286,5 +292,7 @@ function previsous() {
         pagination(pageIndex - 1)
     }
 }
+
+
 
 

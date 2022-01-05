@@ -3,22 +3,24 @@
 <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien" cellspacing="0">
     <thead>
         <tr style="text-align: center ">
-            <th>Mã nhân viên</th>
+            <th>STT</th>
             <th>Họ tên</th>
             <th>Ngày sinh</th>
             <th>SĐT</th>
             <th>Địa chỉ</th>
             <th>Chức vụ</th>
-            <th id="nam" style="text-align:center">Số năm công tác</th>
+            <th>Số năm công tác</th>
             <th>Lựa chọn</th>
         </tr>
     </thead>
     <tbody id="tableNhanVien">
+        @{int index = ViewBag.Stt; }
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                <td type="hide" id="Stt">
+                    @index
+                    @{index++;}
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.HoVaTen)
@@ -35,14 +37,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ChucVu)
                 </td>
-                <td>
+                <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.SoNamCongTac)
                 </td>
                 <td style="text-align: center">
                     <button class="btn btn-outline-secondary btnSua" data-id="@item.MaNhanVien">
                         Sửa
-                    </button>   
-                    <button class="btn btn-outline-danger btnXoa"  data-id="@item.MaNhanVien" >
+                    </button>
+                    <button class="btn btn-outline-danger btnXoa" data-id="@item.MaNhanVien">
                         Xóa
                     </button>
                 </td>

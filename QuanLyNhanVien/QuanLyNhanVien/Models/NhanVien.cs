@@ -34,6 +34,7 @@ namespace QuanLyNhanVien.Models
         public int PhongBan { get; set; }
         
         public PhongBan phong_ban { get; set; }
+
     }
     public abstract class BaseEntity
     {
