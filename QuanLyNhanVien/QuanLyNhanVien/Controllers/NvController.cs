@@ -13,6 +13,7 @@ using System.Web.UI.WebControls;
 using OfficeOpenXml.Table;
 using System.Drawing;
 using OfficeOpenXml.Style;
+using Dapper.FastCrud;
 
 namespace QuanLyNhanVien.Controllers
 {
@@ -24,7 +25,12 @@ namespace QuanLyNhanVien.Controllers
         public ActionResult Index()
 
         {
-            List<NhanVien> dsNhanVien = Pagination();
+            OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
+            using (var connect = new NpgsqlConnection(connectionString))
+            {
+                var nv = connect.Find<NhanVien>();
+            }
+            List<NhanVienModelView> dsNhanVien = Pagination();
             return View("Index", dsNhanVien);
         }
 
@@ -38,7 +44,8 @@ namespace QuanLyNhanVien.Controllers
         public ActionResult Create(NhanVien nv)
         {
             object ketQua = null;
-            var dsNhanVien = Pagination(1, getSumRows());
+            //var dsNhanVien = Pagination(1, getSumRows());
+            var dsNhanVien = Database();
             nv.MaNhanVien = Guid.NewGuid();
             nv.HoVaTen = Fomart.Fomartstring(nv.HoVaTen);
             nv.DiaChi = Fomart.Fomartstring(nv.DiaChi);
@@ -82,24 +89,26 @@ namespace QuanLyNhanVien.Controllers
             if (ketQua != null) return Json(ketQua);
 
             dsNhanVien.Add(nv);
+            OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
-                var Insert = conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") " +
-                                          "VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
-                if (Insert == 0)
-                {
+                conn.Insert<NhanVien>(nv);
+                //var Insert = conn.Execute("INSERT INTO public.nhan_vien (\"MaNhanVien\",\"HoVaTen\",\"NgaySinh\",\"SoDienThoai\",\"DiaChi\",\"ChucVu\",\"SoNamCongTac\",\"PhongBan\") " +
+                //                          "VALUES(@MaNhanVien,@HoVaTen,@NgaySinh,@SoDienThoai,@DiaChi,@ChucVu,@SoNamCongTac,@PhongBan)", nv);
+                //if (Insert)
+                //{
 
-                    ketQua = new
-                    {
-                        success = false,
-                        message = "*Dữ liệu chưa được update",
-                        status = false
+                //    ketQua = new
+                //    {
+                //        success = false,
+                //        message = "*Dữ liệu chưa được update",
+                //        status = false
 
-                    };
+                //    };
 
-                }
-                if (ketQua != null) return Json(ketQua);
+                //}
+                //if (ketQua != null) return Json(ketQua);
             }
             return Json(new { success = true, status = true, data = nv, JsonRequestBehavior.AllowGet });
         }
@@ -123,6 +132,16 @@ namespace QuanLyNhanVien.Controllers
             var dsNhanVien = Pagination(1, getSumRows());
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == nvNew.MaNhanVien);
             object ketQua = null;
+            if (nv == null)
+            {
+                ketQua = new
+                {
+                    success = false,
+                    message = "*Mã nhân viên không tồn tại",
+                    status = false
+                };
+            }
+            if (ketQua != null) return Json(ketQua);
             foreach (var item in dsNhanVien)
             {
                 if (nvNew.MaNhanVien != item.MaNhanVien)
@@ -194,8 +213,19 @@ namespace QuanLyNhanVien.Controllers
         [HttpGet]
         public ActionResult Delete(Guid ma)
         {
+            object ketQua = null;
             var dsNhanVien = Pagination();
             var nv = dsNhanVien.FirstOrDefault(t => t.MaNhanVien == ma);
+            if(nv == null)
+            {
+                ketQua = new
+                {
+                    success = false,
+                    message = "*Mã nhân viên không tồn tại",
+                    status = false
+                };
+            }
+            if (ketQua != null) return Json(ketQua);
             dsNhanVien.Remove(nv);
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
@@ -217,17 +247,17 @@ namespace QuanLyNhanVien.Controllers
 
                 if (PhongBanId != 0)
                 {
-                    where += "AND \"PhongBan\"=" + PhongBanId;
+                    where += $"AND \"PhongBan\"={PhongBanId}";
                 }
 
                 if (!string.IsNullOrEmpty(keyword))
                 {
-                    where += "AND (LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
-                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
-                        "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
-                        "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
-                        "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
-                        "OR \"SoNamCongTac\"::TEXT LIKE '%" + keyword + "%')";
+                    where +=string.Format("AND (LOWER(\"HoVaTen\") LIKE '%{0}%' " +
+                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%{0}%' " +
+                        "OR LOWER(\"DiaChi\") LIKE '%{0}%' " +
+                        "OR \"SoDienThoai\" LIKE '%{0}%' " +
+                        "OR LOWER(\"ChucVu\") LIKE '%{0}%' " +
+                        "OR \"SoNamCongTac\"::TEXT LIKE '%{0}%')", keyword);
                 }
                 ViewBag.TotalPages = getPage(page_size, where);
                 ViewBag.Stt = getStt(page, page_size);
@@ -278,7 +308,7 @@ namespace QuanLyNhanVien.Controllers
             }
         }
 
-        private double getPage(int page_size = 0, string where = "")
+        private int getPage(int page_size = 1, string where = "")
         {
             int rows = 0;
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
@@ -287,10 +317,10 @@ namespace QuanLyNhanVien.Controllers
                 rows = conn.Query<int>("SELECT COUNT(*) FROM public.nhan_vien " + where).FirstOrDefault();
 
             }
-            double page = Math.Ceiling((double)rows / page_size);
-            return page;
+            return (int)Math.Ceiling((decimal)rows / page_size);
         }
-        private List<NhanVien> Pagination(int page = 1, int page_size = 5, int PhongBanId = 0, string keyword = "")
+
+        private List<NhanVienModelView> Pagination(int page = 1, int page_size = 5, int PhongBanId = 0, string keyword = "")
         {
             keyword = keyword.ToLower();
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
@@ -298,53 +328,59 @@ namespace QuanLyNhanVien.Controllers
                 conn.Open();
                 string where = "";
                 string whereSizePage = "";
-                if (page < 1) return new List<NhanVien>();
-                _ = new List<NhanVien>();
-                List<NhanVien> dsNhanVien;
+                if (page < 1) return new List<NhanVienModelView>();
+                _ = new List<NhanVienModelView>();
+                List<NhanVienModelView> dsNhanVien;
                 if (page_size != 0)
                 {
-                    whereSizePage += " OFFSET((" + page + " - 1)*" + page_size + ") LIMIT " + page_size;
+                    whereSizePage += $" OFFSET(({page} - 1)*{page_size}) LIMIT {page_size}";
                 }
                 if (PhongBanId != 0 && keyword != "")
                 {
-                    where += "WHERE \"PhongBan\" = " + PhongBanId + " AND (LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
-                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
-                        "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
-                        "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
-                        "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
-                        "OR \"SoNamCongTac\"::TEXT LIKE '%" + keyword + "%' " +
-                        ") ORDER BY \"HoVaTen\" ASC " + whereSizePage;
+                    where += $"WHERE \"PhongBan\" = {PhongBanId} AND (LOWER(\"HoVaTen\") LIKE '%{keyword}%' OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%{keyword}%' " 
+                        + $"OR LOWER(\"DiaChi\") LIKE '%{keyword}%' " 
+                        + $"OR \"SoDienThoai\" LIKE '%{keyword}%' " 
+                        + $"OR LOWER(\"ChucVu\") LIKE '%{keyword}%' " 
+                        + $"OR \"SoNamCongTac\"::TEXT LIKE '%{keyword}%' " 
+                        + $") ORDER BY \"HoVaTen\" ASC {whereSizePage}";
 
                 }
                 else if (keyword != "")
                 {
-                    where += "WHERE LOWER(\"HoVaTen\") LIKE '%" + keyword + "%' " +
-                        "OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%" + keyword + "%' " +
-                        "OR LOWER(\"DiaChi\") LIKE '%" + keyword + "%' " +
-                        "OR \"SoDienThoai\" LIKE '%" + keyword + "%' " +
-                        "OR LOWER(\"ChucVu\") LIKE '%" + keyword + "%' " +
-                        "OR \"SoNamCongTac\"::TEXT LIKE '%" + keyword + "%' ORDER BY \"HoVaTen\" ASC " + whereSizePage;
+                    where += $"WHERE LOWER(\"HoVaTen\") LIKE '%{keyword}%' " 
+                        + $"OR TO_CHAR(\"NgaySinh\" , 'DD/MM/YYYY') LIKE '%{keyword}%' " 
+                        + $"OR LOWER(\"DiaChi\") LIKE '%{keyword}%' " 
+                        + $"OR \"SoDienThoai\" LIKE '%{keyword}%' " 
+                        + $"OR LOWER(\"ChucVu\") LIKE '%{keyword}%' " 
+                        + $"OR \"SoNamCongTac\"::TEXT LIKE '%{keyword}%' ORDER BY \"HoVaTen\" ASC {whereSizePage}";
                 }
                 else if (PhongBanId != 0)
                 {
-                    where += "WHERE \"PhongBan\" = " + PhongBanId + " ORDER BY \"HoVaTen\" ASC " + whereSizePage;
+                    where += $"WHERE \"PhongBan\" = {PhongBanId} ORDER BY \"HoVaTen\" ASC {whereSizePage}";
                 }
                 else
                 {
-                    where += "ORDER BY \"HoVaTen\" ASC " + whereSizePage;
+                    where += $"ORDER BY \"HoVaTen\" ASC {whereSizePage}";
                 }
-                dsNhanVien = conn.Query<NhanVien>("SELECT * FROM public.nhan_vien " + where).ToList();
-                foreach (var nhanVien in dsNhanVien)
-                {
-                    int phong_ban_id = nhanVien.PhongBan;
-                    nhanVien.phong_ban = conn.Query<PhongBan>("select * from public.phong_ban where \"id\" = @phong_ban_id", new { phong_ban_id }).FirstOrDefault();
-                }
-               // getStt(page, page_size);
+
+                dsNhanVien = conn.Query<NhanVienModelView>($"SELECT * FROM public.nhan_vien INNER JOIN public.phong_ban pb on \"PhongBan\" = id {where}").ToList();
                 return dsNhanVien;
             }
         }
 
-        private void FormatForExcel(ExcelWorksheet worksheet, List<NhanVien> listNhanVien)
+        private List<NhanVien> Database()
+        {
+            List<NhanVien> dsNhanVien;
+            OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                dsNhanVien = (List<NhanVien>)conn.Find<NhanVien>();
+            }
+            return dsNhanVien;
+            }
+
+        private void FormatForExcel(ExcelWorksheet worksheet, List<NhanVienModelView> listNhanVien)
         {
             worksheet.DefaultColWidth = 20;
             worksheet.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -379,7 +415,7 @@ namespace QuanLyNhanVien.Controllers
                 worksheet.Cells[i + 2, 6].Value = item.DiaChi;
                 worksheet.Cells[i + 2, 7].Value = item.ChucVu;
                 worksheet.Cells[i + 2, 8].Value = item.SoNamCongTac;
-                worksheet.Cells[i + 2, 9].Value = item.phong_ban.ten_phong_ban;
+                worksheet.Cells[i + 2, 9].Value = item.ten_phong_ban;
             }
         }
 

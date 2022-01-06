@@ -1,4 +1,4 @@
-﻿@model  IEnumerable<QuanLyNhanVien.Models.NhanVien>
+﻿@model  IEnumerable<QuanLyNhanVien.Models.NhanVienModelView>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -68,7 +68,7 @@
         </div>
 
         <div id="nhanvien_table" class="mt-3">
-            @{Html.RenderAction("Table", "Nv", new { page = 1, page_size = 5, idRoom = 0 });}
+            @{Html.RenderAction("Table", "Nv");}
         </div>
     </div>
 </form>
@@ -110,7 +110,7 @@
                         <input type="number" class="form-control" id="SoNamCongTac" />
                     </div>
                     <div class="mb-3">
-                        <div class="dropdown">
+                        <div class="dropdown" style="width:100%; font-size:21px">
                             <label class="form-label">Phòng ban</label>
                             <select class="form-control" id="insert-room">
                                 <option value="">
@@ -167,9 +167,9 @@
                         <input type="number" class="form-control" id="Sua_SoNamCongTac" name="SoNamCongTac" />
                     </div>
                     <div class="mb-3">
-                        <div class="dropdown">
+                        <div class="dropdown" style="width:100%">
+                            <label class="form-label">Phòng ban: </label>
                             <select class="form-control" id="update-room">
-                                <option value=""></option>
                             </select>
                         </div>
                     </div>

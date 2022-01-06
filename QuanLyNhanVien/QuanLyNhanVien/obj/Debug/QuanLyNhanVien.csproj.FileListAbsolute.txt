@@ -199,3 +199,5 @@ E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Microsoft.IO.Rec
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\System.ComponentModel.Annotations.dll
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\EPPlus.xml
 E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Microsoft.IO.RecyclableMemoryStream.xml
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Dapper.FastCrud.dll
+E:\Projects\Test\TestNhanvien\QuanLyNhanVien\QuanLyNhanVien\bin\Dapper.FastCrud.xml

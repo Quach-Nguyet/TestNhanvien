@@ -235,7 +235,7 @@ $(document).ready(() => {
     $("#form-data").on('click', "#btnSreach", function (e) {
         e.preventDefault()
         const key = $('#keySreach').val();
-        $('#nhanvien_table').load(`/nv/table?page=${pageIndex}&page_size=${$('.filter-page-size').val()}&id=${$('.filter-phong-ban').val()}&keyword=${key}`);
+        $('#nhanvien_table').load(`/nv/table?page=${pageIndex}&page_size=${$('.filter-page-size').val()}&PhongBanId=${$('.filter-phong-ban').val()}&keyword=${key}`);
     })
 
     //Xuất Ex
@@ -266,7 +266,7 @@ function editNV(id) {
         $('#form-sua').find('#Sua_SoDienThoai').val(nv.SoDienThoai);
         $('#form-sua').find('#Sua_ChucVu').val(nv.ChucVu);
         $('#form-sua').find('#Sua_SoNamCongTac').val(nv.SoNamCongTac);
-        $('#update-room').val(nv.phong_ban.id);
+        $('#update-room').val(nv.id);
         $('#update-room').trigger('change');
         $('#SuaNhanVien').modal('show');
     

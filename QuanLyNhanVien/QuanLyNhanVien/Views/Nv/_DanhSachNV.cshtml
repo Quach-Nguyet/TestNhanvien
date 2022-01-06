@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuanLyNhanVien.Models.NhanVien>
+﻿@model List<QuanLyNhanVien.Models.NhanVienModelView>
 
 <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien" cellspacing="0">
     <thead>
@@ -9,6 +9,7 @@
             <th>SĐT</th>
             <th>Địa chỉ</th>
             <th>Chức vụ</th>
+            <th>Phòng ban</th>
             <th>Số năm công tác</th>
             <th>Lựa chọn</th>
         </tr>
@@ -36,6 +37,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ChucVu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ten_phong_ban)
                 </td>
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.SoNamCongTac)
