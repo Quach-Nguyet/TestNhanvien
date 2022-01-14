@@ -14,13 +14,12 @@ $(document).ready(() => {
     $.get('/Nv/getPhongBan').done(xhr => {
         if (xhr.data) {
             $.each(xhr.data, function (i, item) {
-                $('#insert-room').append(`<option value= ${item.id}>${item.ten_phong_ban}</option>`);
-                $('#update-room').append(`<option value= ${item.id}>${item.ten_phong_ban}</option>`);
+                $('#insert-room').append(`<option value= ${item.id}>${item.ten_phong_ban}</option >`);
+                $('#update-room').append(`<option value= ${item.id}>${item.ten_phong_ban}</option >`);
                 $('#dropdown-room').append(`<option value=${item.id}>${item.ten_phong_ban}</option>`);
             })
         }
     })
-
 
     //Mở form sửa
     $("#form-data").on('click', ".btnSua", function (e) {
@@ -97,7 +96,7 @@ $(document).ready(() => {
                 success: respon => {
                     if (respon.status) {
                         $('#SuaNhanVien').modal('hide');
-                        pagination();
+                        pagination(pageIndex);
                     }
                     else {
                         $.toast({
@@ -191,7 +190,7 @@ $(document).ready(() => {
                 if (respon.success) {
                     $('#ThemNhanVien').modal('hide');
                     alert('Lưu thành công!');
-                    pagination();
+                    pagination(pageIndex);
                 }
                 else {
                     $.toast({
@@ -235,13 +234,13 @@ $(document).ready(() => {
     $("#form-data").on('click', "#btnSreach", function (e) {
         e.preventDefault()
         const key = $('#keySreach').val();
-        $('#nhanvien_table').load(`/nv/table?page=${pageIndex}&page_size=${$('.filter-page-size').val()}&PhongBanId=${$('.filter-phong-ban').val()}&keyword=${key}`);
+        $('#nhanvien_table').load(`/nv/table?page_size=${$('.filter-page-size').val()}&PhongBanId=${$('.filter-phong-ban').val()}&keyword=${key}`);
     })
 
     //Xuất Ex
     $("#form-data").on('click', "#Export", function (e) {
         e.preventDefault()
-        location.href = "/nv/export?page_size=" + $('.filter-page-size').val() +"&phongbanid=" + $('.filter-phong-ban').val() + "&keyword=" + $('#keySreach').val();
+        location.href = `/nv/export?page=${pageIndex}&page_size=${$('.filter-page-size').val()}&phongbanid=${$('.filter-phong-ban').val()}&keyword=${$('#keySreach').val()}`;
     })
 });
 
@@ -250,7 +249,7 @@ function deleteNV(id, tableRow) {
     if (confirmed) {
         $.ajax('/Nv/Delete?ma=' + id).then(respon => {
             if (respon.success) {
-                pagination();
+                pagination(pageIndex);
             }
         })
     }
@@ -266,7 +265,7 @@ function editNV(id) {
         $('#form-sua').find('#Sua_SoDienThoai').val(nv.SoDienThoai);
         $('#form-sua').find('#Sua_ChucVu').val(nv.ChucVu);
         $('#form-sua').find('#Sua_SoNamCongTac').val(nv.SoNamCongTac);
-        $('#update-room').val(nv.id);
+        $('#update-room').val(nv.phong_ban.id);
         $('#update-room').trigger('change');
         $('#SuaNhanVien').modal('show');
     
@@ -275,6 +274,7 @@ function editNV(id) {
 
 function pagination(page) {
     pageIndex = page;
+    console.log(page)
     $('#nhanvien_table').load('/nv/table?page=' + page + '&page_size=' + $('.filter-page-size').val() + '&phongbanid=' + $('.filter-phong-ban').val() + '&keyword=' + $('#keySreach').val()
         + '&index=' + $('.Stt').val()
     );

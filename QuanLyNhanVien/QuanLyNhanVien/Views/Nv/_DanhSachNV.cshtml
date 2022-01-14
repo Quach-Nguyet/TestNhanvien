@@ -1,4 +1,4 @@
-﻿@model List<QuanLyNhanVien.Models.NhanVienModelView>
+﻿@model List<QuanLyNhanVien.Models.NhanVien>
 
 <table class="table table-responsive nowrap table-striped table-bordered table-sm paginated" id="bangNhanVien" cellspacing="0">
     <thead>
@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.ChucVu)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ten_phong_ban)
+                    @Html.DisplayFor(modelItem => item.phong_ban.ten_phong_ban)
                 </td>
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.SoNamCongTac)
